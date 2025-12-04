@@ -19,12 +19,12 @@ public class RecipeBuilder {
         this.description = description;
     }
 
-    public RecipeBuilder setTitle(String t) {
+    public RecipeBuilder title(String t) {
         this.title = t;
         return this;
     }
 
-    public RecipeBuilder setDescription(String d) {
+    public RecipeBuilder description(String d) {
         this.description = d;
         return this;
     }
@@ -34,8 +34,18 @@ public class RecipeBuilder {
         return this;
     }
 
+    public RecipeBuilder ingredients(List<Ingredient> i) {
+        this.ingredients.addAll(i);
+        return this;
+    }
+
     public RecipeBuilder addTag(String tag) {
         this.tags.add(tag);
+        return this;
+    }
+
+    public RecipeBuilder tags(List<String> t) {
+        this.tags.addAll(t);
         return this;
     }
 

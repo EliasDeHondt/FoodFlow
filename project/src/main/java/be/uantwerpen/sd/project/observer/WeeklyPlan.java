@@ -12,7 +12,6 @@ public class WeeklyPlan implements Subject {
 
     private final Set<Observer> observers = new HashSet<>();
 
-
     public WeeklyPlan() {
 
     }

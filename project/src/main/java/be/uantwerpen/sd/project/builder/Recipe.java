@@ -48,6 +48,10 @@ public class Recipe {
         this.tags.add(tag);
     }
 
+    public void removeTag(String tag) {
+        this.tags.remove(tag);
+    }
+
     public List<String> getTags() {
         return this.tags;
     }
