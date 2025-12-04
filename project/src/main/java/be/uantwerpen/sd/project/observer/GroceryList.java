@@ -1,9 +1,15 @@
-package be.uantwerpen.sd.project;
+package be.uantwerpen.sd.project.observer;
 
 
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
+
+import be.uantwerpen.sd.project.DayPlan;
+import be.uantwerpen.sd.project.Ingredient;
+import be.uantwerpen.sd.project.MealType;
+import be.uantwerpen.sd.project.builder.Recipe;
+
 import java.util.List;
 
 public class GroceryList implements Observer {

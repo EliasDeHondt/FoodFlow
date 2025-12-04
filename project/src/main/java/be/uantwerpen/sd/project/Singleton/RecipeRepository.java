@@ -1,8 +1,10 @@
-package be.uantwerpen.sd.project;
+package be.uantwerpen.sd.project.Singleton;
 
 
 import java.util.ArrayList;
 import java.util.List;
+
+import be.uantwerpen.sd.project.builder.Recipe;
 
 public class RecipeRepository {
     private final List<Recipe> recipes = new ArrayList<>();

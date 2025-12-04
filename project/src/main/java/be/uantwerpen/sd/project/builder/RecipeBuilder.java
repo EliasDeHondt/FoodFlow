@@ -1,7 +1,9 @@
-package be.uantwerpen.sd.project;
+package be.uantwerpen.sd.project.builder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import be.uantwerpen.sd.project.Ingredient;
 
 public class RecipeBuilder {
     private String title;

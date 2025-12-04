@@ -1,9 +1,11 @@
-package be.uantwerpen.sd.project;
+package be.uantwerpen.sd.project.observer;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import be.uantwerpen.sd.project.DayPlan;
 
 public class WeeklyPlan implements Subject {
     private final Map<String, DayPlan> days = new HashMap<>();

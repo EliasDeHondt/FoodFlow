@@ -3,6 +3,8 @@ package be.uantwerpen.sd.project;
 import java.util.HashMap;
 import java.util.Map;
 
+import be.uantwerpen.sd.project.builder.Recipe;
+
 public class DayPlan {
     private final Map<MealType, Recipe> meals = new HashMap<>();
 

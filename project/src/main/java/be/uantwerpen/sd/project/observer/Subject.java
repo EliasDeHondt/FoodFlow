@@ -1,4 +1,4 @@
-package be.uantwerpen.sd.project;
+package be.uantwerpen.sd.project.observer;
 
 public interface Subject {
     public void addObserver(Observer o);
