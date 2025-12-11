@@ -10,16 +10,16 @@ public class MealPlannerController implements Controller{
     //extra logic voor parsen en datatransmission
 
     public MealPlannerController() {}
-
+    @Override
     public Recipe chooseRecipe(String day,MealType mealType) {
 
         return db.chooseRecipe(day, mealType);
     }
-
+    @Override
     public void setStrategy(MealPlanningStrategy strategy) {
         this.db.setStrategy(strategy);
     }
-
+    @Override
     public void generateWeeklyPlan() {
         this.db.generateWeeklyPlan();
     }
