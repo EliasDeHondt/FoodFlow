@@ -1,5 +1,7 @@
 package be.uantwerpen.sd.project.model;
 
+import java.beans.PropertyChangeSupport;
+
 import be.uantwerpen.sd.project.DayPlan;
 import be.uantwerpen.sd.project.MealType;
 import be.uantwerpen.sd.project.Singleton.RecipeRepository;
@@ -8,6 +10,7 @@ import be.uantwerpen.sd.project.observer.WeeklyPlan;
 import be.uantwerpen.sd.project.strategy.MealPlanningStrategy;
 
 public class MealPlannerDB implements Model{
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
     private WeeklyPlan weeklyplan;
     private MealPlanningStrategy mealplanstrategy;
     private final RecipeRepository recipeRepo = RecipeRepository.getInstance();

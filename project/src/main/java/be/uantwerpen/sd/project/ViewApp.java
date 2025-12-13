@@ -17,9 +17,10 @@ public class ViewApp extends Application{
     @Override
     public void start(Stage stage) {
 
-        Controller controller = new MealPlannerController();
-
         Model model = new MealPlannerDB();
+
+        Controller controller = new MealPlannerController(model);
+        
         MealPlannerView view = new MealPlannerView();
 
         View viewLogic = new View(model, controller, view);
