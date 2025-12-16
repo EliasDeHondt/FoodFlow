@@ -1,5 +1,6 @@
 package be.uantwerpen.sd.project.model;
 
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import be.uantwerpen.sd.project.DayPlan;
@@ -23,6 +24,13 @@ public class MealPlannerDB implements Model{
         return r;
     }
     @Override
+    public void updateRecipe(String day,MealType mealType,Recipe r) {
+        DayPlan d = this.weeklyplan.getDay(day);
+        d.setMeal(mealType, r);
+        this.weeklyplan.setDay(day,d);
+        fire(RegistrationEventType.RECIPE_UPDATED);
+    }
+    @Override
     public void setStrategy(MealPlanningStrategy strategy) {
         this.mealplanstrategy = strategy;
     }
@@ -34,5 +42,21 @@ public class MealPlannerDB implements Model{
     @Override
     public WeeklyPlan getWeeklyPlan() {
         return this.weeklyplan;
+    }
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener l) {
+        pcs.addPropertyChangeListener(l);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener l) {
+        pcs.removePropertyChangeListener(l);
+    }
+
+    // private void fire(RegistrationEventType evt) {
+    //     pcs.firePropertyChange("registration", null, evt);
+    // }
+    private void fire(RegistrationEventType evt) {
+        pcs.firePropertyChange("registration", null, evt);
     }
 }

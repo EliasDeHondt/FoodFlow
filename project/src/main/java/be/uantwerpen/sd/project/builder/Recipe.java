@@ -10,11 +10,13 @@ public class Recipe {
     private final String description;
     private List<Ingredient> ingredients = new ArrayList<>();
     private List<String> tags = new ArrayList<>();
+    private int id;
 
     public Recipe(String title, String description, List<Ingredient> ingredients) {
         this.title = title;
         this.description = description;
         this.ingredients = ingredients;
+        this.id = -1;
     }
 
     public Recipe(String title, String description, List<Ingredient> ingredients, List<String> tags) {
@@ -54,5 +56,14 @@ public class Recipe {
 
     public List<String> getTags() {
         return this.tags;
+    }
+    public void addId(Integer id) {
+        this.id = id;
+    }
+    public int getId() {
+        if (id == -1) {
+            throw new IllegalStateException("Recipe has no ID yet");
+        }
+        return id;
     }
 }

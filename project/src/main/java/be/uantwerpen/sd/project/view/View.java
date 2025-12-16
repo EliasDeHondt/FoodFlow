@@ -15,6 +15,24 @@ public class View implements  PropertyChangeListener{
         this.model = model;
         this.controller = controller;
         this.ui = ui;
+        this.model.addPropertyChangeListener(this);
+        refreshAll();
+    }
+
+    public void setStrategy(String strategy) {
+        try {
+            this.controller.setStrategy(strategy);
+        } catch (Exception e) {
+            this.ui.showError(e.getMessage());
+        }
+    }
+
+    public void generateWeeklyPlan() {
+        try {
+            this.controller.generateWeeklyPlan();
+        } catch (Exception e) {
+            this.ui.showError(e.getMessage());
+        }
     }
 
     @Override

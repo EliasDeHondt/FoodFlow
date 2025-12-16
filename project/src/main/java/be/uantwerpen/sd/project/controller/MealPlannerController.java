@@ -7,7 +7,7 @@ import be.uantwerpen.sd.project.strategy.MealPlanningStrategy;
 import be.uantwerpen.sd.project.strategy.VegetarianMealPlanStrategy;
 
 public class MealPlannerController implements Controller{
-    private Model db;
+    private final Model db;
     //extra logic voor parsen en datatransmission
 
     private static String norm(String s) {

@@ -6,6 +6,12 @@ import be.uantwerpen.sd.project.DayPlan;
 import be.uantwerpen.sd.project.observer.WeeklyPlan;
 import be.uantwerpen.sd.project.view.RenderPort;
 import be.uantwerpen.sd.project.view.View;
+import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
 public class MealPlannerView extends BorderPane implements RenderPort{
@@ -27,5 +33,19 @@ public class MealPlannerView extends BorderPane implements RenderPort{
 
     }
 
-    
+    private void addBackgroundDeselect(ListView<?> lv) {
+        lv.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+            Node n = e.getPickResult().getIntersectedNode();
+            while (n != null && n != lv && !(n instanceof ListCell)) n = n.getParent();
+            if (n == lv || n == null) {
+                lv.getSelectionModel().clearSelection();
+                e.consume();
+            }
+        });
+    }
+
+    @Override
+    public void showError(String message) {
+        Platform.runLater(() -> new Alert(Alert.AlertType.ERROR, message).showAndWait());
+    }
 }
