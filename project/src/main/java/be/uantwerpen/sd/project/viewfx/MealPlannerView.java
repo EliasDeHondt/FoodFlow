@@ -19,9 +19,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
-public class MealPlannerView extends BorderPane implements RenderPort{
+public class MealPlannerView extends BorderPane implements RenderPort {
     private View logic;
-
     private final VBox formBox = new VBox(8);
 
     public MealPlannerView() {
@@ -32,10 +31,7 @@ public class MealPlannerView extends BorderPane implements RenderPort{
         this.logic = logic;
     }
 
-
-    // @Override
     private void displayWeeklyPlan() {
-        //not final just for testing
         WeeklyPlan plan = new WeeklyPlan();
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -43,32 +39,44 @@ public class MealPlannerView extends BorderPane implements RenderPort{
         grid.setPadding(new Insets(10));
 
         String[] dayNames = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
-        MealType[] meals = {MealType.BREAKFAST,MealType.LUNCH,MealType.DINNER,MealType.SNACK};
+        MealType[] meals = {MealType.BREAKFAST, MealType.LUNCH, MealType.DINNER, MealType.SNACK};
 
+        // Headers voor dagen
         for (int col = 0; col < 7; col++) {
             grid.add(new Label(dayNames[col]), col + 1, 0);
         }
 
+        // Headers voor maaltijden
         for (int row = 0; row < meals.length; row++) {
             grid.add(new Label(meals[row].name()), 0, row + 1);
         }
 
+        // Vul de grid met data
         for (int col = 0; col < 7; col++) {
             DayPlan day = plan.getDay(dayNames[col]);
+
             for (int row = 0; row < meals.length; row++) {
-                Recipe recipe = day.getMeal(meals[row]);
-                Label label = new Label(recipe.getTitle());
+                Label label;
+
+                if (day == null) {
+                    label = new Label("No plan");
+                } else {
+                    Recipe recipe = day.getMeal(meals[row]);
+                    if (recipe == null) {
+                        label = new Label("No meal");
+                    } else {
+                        label = new Label(recipe.getTitle());
+                    }
+                }
+
                 label.setMinWidth(100);
                 label.setAlignment(Pos.CENTER);
                 grid.add(label, col + 1, row + 1);
             }
         }
 
+        this.setCenter(grid);
     }
-    // @Override
-    // public void displayGroceryList(Map<String, Double> items,DayPlan day) {
-
-    // }
 
     private void toggleForm(boolean show) {
         for (Node n : formBox.getChildren()) n.setDisable(!show);

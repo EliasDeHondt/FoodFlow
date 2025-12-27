@@ -32,6 +32,4 @@ public class ViewApp extends Application{
         stage.setScene(scene);
         stage.show();
     }
-
-    
 }
