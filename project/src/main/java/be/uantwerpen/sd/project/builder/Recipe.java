@@ -1,6 +1,5 @@
 package be.uantwerpen.sd.project.builder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import be.uantwerpen.sd.project.Ingredient;
@@ -8,15 +7,19 @@ import be.uantwerpen.sd.project.Ingredient;
 public class Recipe {
     private final String title;
     private final String description;
-    private List<Ingredient> ingredients = new ArrayList<>();
-    private List<String> tags = new ArrayList<>();
+    private List<Ingredient> ingredients = List.of();
+    private List<String> tags = List.of();
     private int id;
 
-    public Recipe(String title, String description, List<Ingredient> ingredients) {
-        this.title = title;
-        this.description = description;
-        this.ingredients = ingredients;
-        this.id = -1;
+    public static RecipeBuilder builder() {
+        return new RecipeBuilder();
+    }
+
+    public static Recipe empty() {
+        return Recipe.builder()
+            .title("")
+            .description("")
+            .build();
     }
 
     public Recipe(String title, String description, List<Ingredient> ingredients, List<String> tags) {
@@ -24,6 +27,7 @@ public class Recipe {
         this.description = description;
         this.ingredients = ingredients;
         this.tags = tags;
+        this.id = -1;
     }
 
     public void addIngredient(Ingredient i) {

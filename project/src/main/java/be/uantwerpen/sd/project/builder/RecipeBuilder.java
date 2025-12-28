@@ -1,6 +1,5 @@
 package be.uantwerpen.sd.project.builder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import be.uantwerpen.sd.project.Ingredient;
@@ -8,16 +7,16 @@ import be.uantwerpen.sd.project.Ingredient;
 public class RecipeBuilder {
     private String title;
     private String description;
-    private final List<Ingredient> ingredients = new ArrayList<>();
-    private final List<String> tags = new ArrayList<>();
+    private List<Ingredient> ingredients = List.of();
+    private List<String> tags = List.of();
 
     public RecipeBuilder() {
     }
 
-    public RecipeBuilder(String title,String description) {
-        this.title = title;
-        this.description = description;
-    }
+    // public RecipeBuilder(String title,String description) {
+    //     this.title = title;
+    //     this.description = description;
+    // }
 
     public RecipeBuilder title(String t) {
         this.title = t;
@@ -29,30 +28,27 @@ public class RecipeBuilder {
         return this;
     }
 
-    public RecipeBuilder addIngredient(Ingredient i) {
-        this.ingredients.add(i);
-        return this;
-    }
+    // public RecipeBuilder addIngredient(Ingredient i) {
+    //     this.ingredients.add(i);
+    //     return this;
+    // }
 
     public RecipeBuilder ingredients(List<Ingredient> i) {
-        this.ingredients.addAll(i);
+        this.ingredients = i;
         return this;
     }
 
-    public RecipeBuilder addTag(String tag) {
-        this.tags.add(tag);
-        return this;
-    }
+    // public RecipeBuilder addTag(String tag) {
+    //     this.tags.add(tag);
+    //     return this;
+    // }
 
     public RecipeBuilder tags(List<String> t) {
-        this.tags.addAll(t);
+        this.tags = t;
         return this;
     }
 
     public Recipe build() {
-        if (this.tags.isEmpty()) {
-            return new Recipe(this.title,this.description,this.ingredients);
-        }
         return new Recipe(this.title,this.description,this.ingredients,this.tags);
     }
 }

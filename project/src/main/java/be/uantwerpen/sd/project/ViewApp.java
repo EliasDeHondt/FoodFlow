@@ -23,7 +23,7 @@ public class ViewApp extends Application{
         
         MealPlannerView view = new MealPlannerView();
 
-        View viewLogic = new View(model, controller, view);
+        View viewLogic = new View(model, controller, view, stage);
 
         view.attachLogic(viewLogic);
 

@@ -16,7 +16,9 @@ public class MealPlannerDB implements Model{
     private MealPlanningStrategy mealplanstrategy;
     private final RecipeRepository recipeRepo = RecipeRepository.getInstance();
 
-    public MealPlannerDB() {}
+    public MealPlannerDB() {
+        this.weeklyplan = new WeeklyPlan();
+    }
     @Override
     public Recipe chooseRecipe(String day,MealType mealType) {
         DayPlan d = this.weeklyplan.getDay(day);
@@ -52,7 +54,10 @@ public class MealPlannerDB implements Model{
     public void removePropertyChangeListener(PropertyChangeListener l) {
         pcs.removePropertyChangeListener(l);
     }
-
+    @Override
+    public void AddRecipe(Recipe r) {
+        this.recipeRepo.addRecipe(r);
+    }
     // private void fire(RegistrationEventType evt) {
     //     pcs.firePropertyChange("registration", null, evt);
     // }

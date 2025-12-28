@@ -1,6 +1,7 @@
 package be.uantwerpen.sd.project.controller;
 
 import be.uantwerpen.sd.project.MealType;
+import be.uantwerpen.sd.project.builder.Recipe;
 import be.uantwerpen.sd.project.model.Model;
 import be.uantwerpen.sd.project.strategy.DefaultMealPlanStrategy;
 import be.uantwerpen.sd.project.strategy.MealPlanningStrategy;
@@ -19,13 +20,22 @@ public class MealPlannerController implements Controller{
     public MealPlannerController(Model db) {
         this.db = db;
     }
+    // @Override
+    // public void chooseRecipe(String day,MealType mealtype) {
+    //     if (norm(day) != null) {
+    //     MealType m = mealtype;
+    //     db.chooseRecipe(day, m);}
+    //     else {
+    //         throw new IllegalArgumentException("Please provide both a day and a meal type.");
+    //     }
+    // }
     @Override
-    public void chooseRecipe(String day,MealType mealType) {
+    public void updateRecipe(String day,MealType mealtype,Recipe r) {
         if (norm(day) != null) {
-        MealType m = mealType;
-        db.chooseRecipe(day, m);}
+        MealType m = mealtype;
+        db.updateRecipe(day, m, r);}
         else {
-            throw new IllegalArgumentException("Please provide both a day and a meal type.");
+            throw new IllegalArgumentException("Please provide both a day, meal type and recipe.");
         }
     }
     @Override
@@ -39,5 +49,9 @@ public class MealPlannerController implements Controller{
     @Override
     public void generateWeeklyPlan() {
         this.db.generateWeeklyPlan();
+    }
+    @Override
+    public void AddRecipe(Recipe r) {
+        
     }
 }

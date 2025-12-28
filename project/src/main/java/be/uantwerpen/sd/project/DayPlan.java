@@ -2,8 +2,8 @@ package be.uantwerpen.sd.project;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import be.uantwerpen.sd.project.builder.Recipe;
 
@@ -11,7 +11,9 @@ public class DayPlan {
     private final Map<MealType, Recipe> meals = new HashMap<>();
 
     public DayPlan() {
-
+        for (MealType type : MealType.values()) {
+            meals.put(type, Recipe.empty());
+        }
     }
 
     public void setMeal(MealType type, Recipe recipe) {

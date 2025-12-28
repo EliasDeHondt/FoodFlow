@@ -15,4 +15,5 @@ public interface Model {
     public WeeklyPlan getWeeklyPlan();
     public void addPropertyChangeListener(PropertyChangeListener l);
     public void removePropertyChangeListener(PropertyChangeListener l);
+    public void AddRecipe(Recipe r);
 }

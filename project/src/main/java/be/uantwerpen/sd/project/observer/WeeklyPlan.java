@@ -13,7 +13,10 @@ public class WeeklyPlan implements Subject {
     private final Set<Observer> observers = new HashSet<>();
 
     public WeeklyPlan() {
-
+        String[] dayNames = {"mon","tue","wed","thu","fri","sat","sun"};
+        for (int col = 0; col < 7; col++) {
+            days.put(dayNames[col], new DayPlan());
+        }
     }
 
     public DayPlan getDay(String name) {
