@@ -17,7 +17,7 @@ public class Recipe {
 
     public static Recipe empty() {
         return Recipe.builder()
-            .title("")
+            .title("No Recipe")
             .description("")
             .build();
     }

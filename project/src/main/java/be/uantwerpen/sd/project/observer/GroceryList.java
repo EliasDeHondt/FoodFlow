@@ -16,14 +16,17 @@ public class GroceryList implements Observer {
     }
     @Override
     public void update(String event, Object payload) {
+        this.items.clear();
         if (event.equals("new_dayplan")) {
-            DayPlan plan = (DayPlan) payload;
-
-            for (Recipe r: plan.getRecipes()) {
-                for (Ingredient i : r.getIngredients()) {
-                    addItem(i.getName(), i.getQuantity());
+            WeeklyPlan plan = (WeeklyPlan) payload;
+            for (DayPlan day : plan.getDays()) {
+                for (Recipe r: day.getRecipes()) {
+                    for (Ingredient i : r.getIngredients()) {
+                        addItem(i.getName(), i.getQuantity());
+                    }
                 }
             }
+            
         }
     }
 

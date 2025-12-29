@@ -7,6 +7,8 @@ import be.uantwerpen.sd.project.builder.Recipe;
 public interface RenderPort {
     void showRecipes(List<Recipe> recipes);
 
+    void showMeals(Recipe[][] meals);
+
     void clearInputs();
 
     void setActionsEnabled(boolean hasSelection);

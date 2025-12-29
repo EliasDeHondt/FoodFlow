@@ -21,15 +21,6 @@ public class MealPlannerController implements Controller{
         this.db = db;
     }
     @Override
-    public void getRecipe(String day,MealType mealtype) {
-        if (norm(day) != null) {
-        MealType m = mealtype;
-        db.chooseRecipe(day, m);}
-        else {
-            throw new IllegalArgumentException("Please provide both a day and a meal type.");
-        }
-    }
-    @Override
     public void updateMeal(String day,MealType mealtype,Recipe r) {
         if (norm(day) != null) {
         MealType m = mealtype;

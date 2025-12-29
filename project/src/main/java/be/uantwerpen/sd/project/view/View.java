@@ -10,35 +10,41 @@ import be.uantwerpen.sd.project.builder.Recipe;
 import be.uantwerpen.sd.project.controller.Controller;
 import be.uantwerpen.sd.project.model.Model;
 import be.uantwerpen.sd.project.model.RegistrationEventType;
+import be.uantwerpen.sd.project.viewfx.GroceryListView;
+import be.uantwerpen.sd.project.viewfx.MealPlannerView;
 import javafx.stage.Stage;
 
 public class View implements  PropertyChangeListener{
     private final Model model;
     private final Controller controller;
     private final RenderPort ui;
+    private final RenderPort ui2;
     private Recipe currentSelection;
     private final Stage stage;
     
-    public View(Model model, Controller controller, RenderPort ui, Stage stage) {
+    public View(Model model, Controller controller, RenderPort ui, RenderPort ui2, Stage stage) {
         this.model = model;
         this.controller = controller;
         this.ui = ui;
+        this.ui2 = ui2;
         this.stage = stage;
         this.model.addPropertyChangeListener(this);
         refreshAll();
     }
 
-    public void GetRecipe(String day,MealType mealtype) {
-        try {
-            this.controller.getRecipe(day,mealtype);
-        } catch (Exception e) {
-            this.ui.showError(e.getMessage());
-        }
+    public void ToGroceryList() {
+        stage.getScene().setRoot((GroceryListView) ui2);
+        stage.setTitle("GroceryList");
+    }
+
+    public void ToMealPlanner() {
+        stage.getScene().setRoot((MealPlannerView) ui);
+        stage.setTitle("MealPlanner");
     }
 
     public void onSetRecipe(String day,MealType mealtype,Recipe r) {
         try {
-            this.controller.updateMeal(day, mealtype, r);
+            this.controller.updateMeal(day.toLowerCase(), mealtype, r);
         } catch (Exception e) {
             this.ui.showError(e.getMessage());
         }
@@ -63,8 +69,8 @@ public class View implements  PropertyChangeListener{
     public void onAddRecipe(String title,String descr,List<Ingredient> i, List<String> tags ) {
         try {
             Recipe r = Recipe.builder()
-                .title(title)
-                .description(descr)
+                .title(title.trim())
+                .description(descr.trim())
                 .ingredients(i)
                 .tags(tags)
                 .build();
@@ -99,6 +105,8 @@ public class View implements  PropertyChangeListener{
                 || re == RegistrationEventType.RECIPE_REMOVED
                 || re == RegistrationEventType.RECIPE_UPDATED) {
             ui.showRecipes(model.getRecipes());
+        } else if (re == RegistrationEventType.MEAL_CHANGED) {
+            ui.showMeals(model.getWeeklyPlan());
         }
     }
 

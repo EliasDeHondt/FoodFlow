@@ -1,7 +1,9 @@
 package be.uantwerpen.sd.project.observer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,9 +25,13 @@ public class WeeklyPlan implements Subject {
         return this.days.get(name);
     }
 
+    public List<DayPlan> getDays() {
+        return new ArrayList<>(this.days.values());
+    }
+
     public void setDay(String name, DayPlan day) {
         this.days.put(name, day);
-        notifyObservers("new_dayplan",this.days.get(name));
+        notifyObservers("new_dayplan",this);
     }
     @Override
     public void addObserver(Observer o) {

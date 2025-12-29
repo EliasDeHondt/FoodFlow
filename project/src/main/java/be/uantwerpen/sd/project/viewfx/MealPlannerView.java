@@ -3,11 +3,9 @@ package be.uantwerpen.sd.project.viewfx;
 import java.util.ArrayList;
 import java.util.List;
 
-import be.uantwerpen.sd.project.DayPlan;
 import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.MealType;
 import be.uantwerpen.sd.project.builder.Recipe;
-import be.uantwerpen.sd.project.observer.WeeklyPlan;
 import be.uantwerpen.sd.project.view.RenderPort;
 import be.uantwerpen.sd.project.view.View;
 import javafx.application.Platform;
@@ -34,10 +32,19 @@ import javafx.scene.layout.VBox;
 
 public class MealPlannerView extends BorderPane implements RenderPort {
     private final ListView<Recipe> RecipeList = new ListView<>();
+    private final Recipe[][] plan = new Recipe[7][4];
+    
+    private final Button changePageButton = new Button("Grocerylist");
 
     private final Button addRecipeButton = new Button("Add");
     private final Button editRecipeButton = new Button("Edit");
     private final Button deleteRecipeButton = new Button("Delete");
+
+    private final Button generatePlanButton = new Button("Generate Plan");
+    private final Button removeMealButton = new Button("Remove");
+    private final Button changeMealButton = new Button("Change");
+
+    private final VBox MealBox = new VBox(8);
 
     private final TextField nameField = new TextField();
     private final TextField descriptionField = new TextField();
@@ -48,9 +55,10 @@ public class MealPlannerView extends BorderPane implements RenderPort {
 
     public MealPlannerView() {
 
-        GridPane calendar = displayWeeklyPlan();
+        buildWeeklyPlan();
         Label leftTitle = new Label("Weekly plan");
-        VBox left = new VBox(8, leftTitle, calendar);
+        HBox leftHeader = new HBox(8, leftTitle, generatePlanButton, changeMealButton, removeMealButton);
+        VBox left = new VBox(8, leftHeader, MealBox);
         left.setPadding(new Insets(8));
         setLeft(left);
         
@@ -69,15 +77,33 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         right.setPadding(new Insets(8));
         setRight(right);
 
+        VBox top = new VBox(12, changePageButton);
+        top.setPadding(new Insets(8));
+        setTop(top);
+
         RecipeList.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
             if (logic != null) logic.onSelectionChanged(newV);
             toggleForm(false);
         });
 
-        
+        RecipeList.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Recipe e, boolean empty) {
+                super.updateItem(e, empty);
+                if (empty || e == null) {
+                    setText(null);
+                    setOnMouseClicked(ev -> RecipeList.getSelectionModel().clearSelection());
+                    return;
+                }
+                setText(e.getTitle());
+                setOnMouseClicked(null);
+            }
+        });
 
 
-
+        changePageButton.setOnAction(e -> {
+            if (logic != null) logic.ToGroceryList();
+        });
         
         addRecipeButton.setOnAction(e -> toggleForm(true));
 
@@ -91,7 +117,12 @@ public class MealPlannerView extends BorderPane implements RenderPort {
             if (logic != null) logic.onDeleteSelected(sel);
         });
 
+        generatePlanButton.setOnAction(e -> {
+            if (logic != null) logic.onGenerateWeeklyPlan();
+        });
+
         toggleForm(false);
+        addBackgroundDeselect(RecipeList);
         
     }
 
@@ -137,7 +168,7 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         formBox.getChildren().setAll(new Label("Add recipe"), grid, buttons);
     }
 
-     private void showEditRecipeDialog(Recipe sel) {
+    private void showEditRecipeDialog(Recipe sel) {
         Dialog<Recipe> dlg = new Dialog<>();
         dlg.setTitle("Edit Recipe");
         TextField name = new TextField(sel.getTitle());
@@ -166,9 +197,15 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         gp.add(addIngredientBtn, 1, 4);
 
         dlg.getDialogPane().setContent(gp);
+        dlg.getDialogPane().setPrefSize(500, 400);
         dlg.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         dlg.setResultConverter(bt -> {
-            if (bt == ButtonType.OK) return Recipe.builder().build().addId(sel.getId());
+            if (bt == ButtonType.OK) return Recipe.builder()
+                                                .title(name.getText())
+                                                .description(description.getText())
+                                                .ingredients(getIngredients(ingredients))
+                                                .tags(new ArrayList<>())
+                                                .build().addId(sel.getId());
             return null;
         });
         dlg.showAndWait().ifPresent(e -> {
@@ -208,11 +245,11 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         UnitBox.setEditable(false);
 
         HBox row = new HBox(5);
-        TextField title = new TextField();
-        title.setPromptText(nameS);
+        TextField title = new TextField(nameS);
+        
 
-        TextField amount = new TextField();
-        amount.setPromptText(amountS);
+        TextField amount = new TextField(amountS);
+        
 
         Button removeBtn = new Button("Remove");
         removeBtn.setOnAction(e -> ingredientsBox.getChildren().remove(row));
@@ -253,8 +290,8 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         return ingredients;
     }
 
-    private GridPane displayWeeklyPlan() {
-        WeeklyPlan plan = new WeeklyPlan();
+    private void buildWeeklyPlan() {
+
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -275,17 +312,12 @@ public class MealPlannerView extends BorderPane implements RenderPort {
 
         // Vul de grid met data
         for (int row = 0; row < 7; row++) {
-            DayPlan day = plan.getDay(dayNames[row].toLowerCase());
 
             for (int col = 0; col < meals.length; col++) {
                 Label label;
 
-                if (day == null) {
-                    label = new Label("No plan");
-                } else {
-                    Recipe recipe = day.getMeal(meals[col]);
-                    label = new Label(recipe == null ? "No meal" : recipe.getTitle()+"test");
-                }
+                Recipe recipe = plan[row][col];
+                label = new Label(recipe == null ? "No meal" : recipe.getTitle());
 
                 label.setPrefWidth(80);
                 label.setAlignment(Pos.CENTER);
@@ -293,7 +325,7 @@ public class MealPlannerView extends BorderPane implements RenderPort {
             }
         }
 
-        return grid;
+        MealBox.getChildren().setAll(grid);
     }
 
     private void toggleForm(boolean show) {
@@ -332,14 +364,13 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         });
     }
 
-    // @Override
-    // public void showEntries(java.util.List<RegisterEntry> entries) {
-    //     javafx.application.Platform.runLater(() -> {
-    //         java.util.List<RegisterEntry> sorted = new java.util.ArrayList<>(entries);
-    //         sorted.sort(java.util.Comparator.comparing(RegisterEntry::timestamp));
-    //         entryList.getItems().setAll(sorted);
-    //     });
-    // }
+    @Override
+    public void showMeals(Recipe[][] meals) {
+        for (int i = 0; i < plan.length; i++) {
+            System.arraycopy(meals[i], 0, plan[i], 0, plan[i].length);
+        }
+        buildWeeklyPlan();
+    }
 
     @Override
     public void clearInputs() {
@@ -356,10 +387,8 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         Platform.runLater(() -> {
             editRecipeButton.setDisable(!hasSelection);
             deleteRecipeButton.setDisable(!hasSelection);
-            addRecipeButton.setDisable(!hasSelection);
-            boolean hasEntry = RecipeList.getSelectionModel().getSelectedItem() != null;
-            // editEntryButton.setDisable(!hasEntry);
-            // deleteEntryButton.setDisable(!hasEntry);
+            changeMealButton.setDisable(!hasSelection);
+            removeMealButton.setDisable(!hasSelection);
         });
     }
 

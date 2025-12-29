@@ -4,7 +4,6 @@ import be.uantwerpen.sd.project.MealType;
 import be.uantwerpen.sd.project.builder.Recipe;
 
 public interface Controller {
-    public void getRecipe(String day,MealType mealType);
     public void updateMeal(String day,MealType mealType,Recipe r);
     public void setStrategy(String strategy);
     public void generateWeeklyPlan();

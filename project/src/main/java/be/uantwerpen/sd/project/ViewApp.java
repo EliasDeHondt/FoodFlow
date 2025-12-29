@@ -5,6 +5,7 @@ import be.uantwerpen.sd.project.controller.MealPlannerController;
 import be.uantwerpen.sd.project.model.MealPlannerDB;
 import be.uantwerpen.sd.project.model.Model;
 import be.uantwerpen.sd.project.view.View;
+import be.uantwerpen.sd.project.viewfx.GroceryListView;
 import be.uantwerpen.sd.project.viewfx.MealPlannerView;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -23,9 +24,12 @@ public class ViewApp extends Application{
         
         MealPlannerView view = new MealPlannerView();
 
-        View viewLogic = new View(model, controller, view, stage);
+        GroceryListView view2 = new GroceryListView();
+
+        View viewLogic = new View(model, controller, view, view2, stage);
 
         view.attachLogic(viewLogic);
+        view2.attachLogic(viewLogic);
 
         Scene scene = new Scene(view, 960, 560);
         stage.setTitle("MealPlanner");
