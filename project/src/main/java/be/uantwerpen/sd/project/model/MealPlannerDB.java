@@ -11,6 +11,7 @@ import be.uantwerpen.sd.project.Singleton.RecipeRepository;
 import be.uantwerpen.sd.project.builder.Recipe;
 import be.uantwerpen.sd.project.observer.GroceryList;
 import be.uantwerpen.sd.project.observer.WeeklyPlan;
+import be.uantwerpen.sd.project.strategy.DefaultMealPlanStrategy;
 import be.uantwerpen.sd.project.strategy.MealPlanningStrategy;
 
 public class MealPlannerDB implements Model{
@@ -23,6 +24,7 @@ public class MealPlannerDB implements Model{
     public MealPlannerDB() {
         this.weeklyplan = new WeeklyPlan();
         this.grocerylist = new GroceryList();
+        this.mealplanstrategy = new DefaultMealPlanStrategy();
     }
     @Override
     public List<Ingredient> getGroceries() {
@@ -43,6 +45,12 @@ public class MealPlannerDB implements Model{
         DayPlan d = this.weeklyplan.getDay(day);
         d.setMeal(mealType, r);
         this.weeklyplan.setDay(day,d);
+        fire(RegistrationEventType.MEAL_CHANGED);
+    }
+    @Override
+    public void removeMeal(String day,MealType mealType) {
+        DayPlan d = this.weeklyplan.getDay(day);
+        d.setMeal(mealType,Recipe.empty());
         fire(RegistrationEventType.MEAL_CHANGED);
     }
     @Override

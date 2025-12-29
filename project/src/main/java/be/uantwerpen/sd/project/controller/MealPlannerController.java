@@ -46,6 +46,15 @@ public class MealPlannerController implements Controller{
         }
     }
     @Override
+    public void removeMeal(String day,MealType mealType) {
+        if (norm(day) != null) {
+        MealType m = mealType;
+        db.removeMeal(day, m);}
+        else {
+            throw new IllegalArgumentException("Please provide both a day and meal type.");
+        }
+    }
+    @Override
     public void setStrategy(String strategy) {
         MealPlanningStrategy s = new DefaultMealPlanStrategy();
         if (strategy.equals("vegetarian")) {

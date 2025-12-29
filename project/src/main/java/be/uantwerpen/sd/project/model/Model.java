@@ -14,6 +14,7 @@ public interface Model {
     public void addGrocery(Ingredient i);
     public void removeGrocery(Ingredient i);
     public void updateMeal(String day,MealType mealType,Recipe r);
+    public void removeMeal(String day,MealType mealType);
     public void setStrategy(MealPlanningStrategy strategy);
     public void generateWeeklyPlan();
     public Recipe[][] getWeeklyPlan();

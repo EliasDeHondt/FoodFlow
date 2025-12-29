@@ -8,6 +8,7 @@ public interface Controller {
     public void addGrocery(String name,String amount,String unit);
     public void removeGrocery(Ingredient i);
     public void updateMeal(String day,MealType mealType,Recipe r);
+    public void removeMeal(String day,MealType mealType);
     public void setStrategy(String strategy);
     public void generateWeeklyPlan();
     public void AddRecipe(Recipe r);

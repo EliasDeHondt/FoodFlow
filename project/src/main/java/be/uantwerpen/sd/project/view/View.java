@@ -41,10 +41,18 @@ public class View implements  PropertyChangeListener{
         stage.getScene().setRoot((MealPlannerView) ui);
         stage.setTitle("MealPlanner");
     }
-
+    // functie voor Recipe in de WeeklyPlan te veranderen
     public void onSetRecipe(String day,MealType mealtype,Recipe r) {
         try {
             this.controller.updateMeal(day.toLowerCase(), mealtype, r);
+        } catch (Exception e) {
+            this.ui.showError(e.getMessage());
+        }
+    }
+    // functie voor Recipe in de WeeklyPlan te verwijderen
+    public void onSetRecipe(String day,MealType mealtype) {
+        try {
+            this.controller.removeMeal(day.toLowerCase(), mealtype);
         } catch (Exception e) {
             this.ui.showError(e.getMessage());
         }

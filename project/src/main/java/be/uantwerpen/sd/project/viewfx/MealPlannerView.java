@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -26,6 +27,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -142,6 +144,17 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         scrollPane.setPrefHeight(100);
         scrollPane.setFitToWidth(true);
 
+        String[] tags = {"Vegan", "Breakfast", "Lunch", "Dinner", "Snack"};
+
+        FlowPane tagPane = new FlowPane();
+        tagPane.setHgap(5);
+        tagPane.setVgap(5);
+        tagPane.setPrefWrapLength(0);
+        for (String tag : tags) {
+            CheckBox checkBox = new CheckBox(tag);
+            tagPane.getChildren().add(checkBox);
+        }
+
         Button addIngredientBtn = new Button("Add Ingredient");
         addIngredientBtn.setOnAction(e -> addIngredientRow(ingredientsBox));
 
@@ -155,13 +168,15 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         grid.add(new Label("Ingredients"), 0, 2);
         grid.add(scrollPane, 0, 3, 2, 1);
         grid.add(addIngredientBtn, 1, 4);
-        
+        grid.add(new Label("Tags"), 0, 5);
+        grid.add(tagPane, 0, 6, 2, 1);
+    
 
         Button save = new Button("Save");
         Button cancel = new Button("Cancel");
 
         save.setOnAction(e -> {
-            if (logic != null) logic.onAddRecipe(nameField.getText(),descriptionField.getText(),getIngredients(ingredientsBox),new ArrayList<>());
+            if (logic != null) logic.onAddRecipe(nameField.getText(),descriptionField.getText(),getIngredients(ingredientsBox),getTags(tagPane));
         });
 
         cancel.setOnAction(e -> {
@@ -189,6 +204,25 @@ public class MealPlannerView extends BorderPane implements RenderPort {
             addIngredientRow(ingredients,i.getName(),i.getQuantity().toString(),i.getUnit());
         }
 
+        String[] tags = {"Vegan", "Breakfast", "Lunch", "Dinner", "Snack"};
+        List<String> objTags = sel.getTags();
+
+        FlowPane tagPane = new FlowPane();
+        tagPane.setHgap(5);
+        tagPane.setVgap(5);
+        tagPane.setPrefWrapLength(0);
+        for (String tag : tags) {
+            CheckBox checkBox = new CheckBox(tag);
+            tagPane.getChildren().add(checkBox);
+        }
+        for (Node node : tagPane.getChildren()) {
+            if (node instanceof CheckBox checkBox) {
+                if (objTags.contains(checkBox.getText())) {
+                    checkBox.setSelected(true);
+                }
+            }
+        }
+
         Button addIngredientBtn = new Button("Add Ingredient");
         addIngredientBtn.setOnAction(e -> addIngredientRow(ingredients));
 
@@ -202,6 +236,8 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         gp.add(new Label("Ingredients"), 0, 2);
         gp.add(scrollPane, 0, 3, 2, 1);
         gp.add(addIngredientBtn, 1, 4);
+        gp.add(new Label("Tags"), 0, 5);
+        gp.add(tagPane, 0, 6, 2, 1);
 
         dlg.getDialogPane().setContent(gp);
         dlg.getDialogPane().setPrefSize(500, 400);
@@ -211,7 +247,7 @@ public class MealPlannerView extends BorderPane implements RenderPort {
                                                 .title(name.getText())
                                                 .description(description.getText())
                                                 .ingredients(getIngredients(ingredients))
-                                                .tags(new ArrayList<>())
+                                                .tags(getTags(tagPane))
                                                 .build().addId(sel.getId());
             return null;
         });
@@ -242,6 +278,7 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         row.getChildren().addAll(title, amount, UnitBox, removeBtn);
         ingredientsBox.getChildren().add(row);
     }
+    
     private void addIngredientRow(VBox ingredientsBox,String nameS, String amountS, String unit) {
         ComboBox<String> UnitBox = new ComboBox<>();
         ObservableList<String> units = FXCollections.observableArrayList(
@@ -295,6 +332,17 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         }
 
         return ingredients;
+    }
+
+    private List<String> getTags(FlowPane tagPane) {
+        List<String> selectedTags = tagPane.getChildren().stream()
+        .filter(node -> node instanceof CheckBox)
+        .map(node -> (CheckBox) node)
+        .filter(CheckBox::isSelected)
+        .map(CheckBox::getText)
+        .map(String::toLowerCase)
+        .toList();
+        return selectedTags;
     }
 
     private void buildWeeklyPlan() {
