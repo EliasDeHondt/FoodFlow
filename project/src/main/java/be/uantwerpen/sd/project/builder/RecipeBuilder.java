@@ -9,14 +9,10 @@ public class RecipeBuilder {
     private String description;
     private List<Ingredient> ingredients = List.of();
     private List<String> tags = List.of();
+    private Integer id =-1;
 
     public RecipeBuilder() {
     }
-
-    // public RecipeBuilder(String title,String description) {
-    //     this.title = title;
-    //     this.description = description;
-    // }
 
     public RecipeBuilder title(String t) {
         this.title = t;
@@ -28,27 +24,22 @@ public class RecipeBuilder {
         return this;
     }
 
-    // public RecipeBuilder addIngredient(Ingredient i) {
-    //     this.ingredients.add(i);
-    //     return this;
-    // }
-
     public RecipeBuilder ingredients(List<Ingredient> i) {
         this.ingredients = i;
         return this;
     }
-
-    // public RecipeBuilder addTag(String tag) {
-    //     this.tags.add(tag);
-    //     return this;
-    // }
 
     public RecipeBuilder tags(List<String> t) {
         this.tags = t;
         return this;
     }
 
+    public RecipeBuilder id(int id) {
+        this.id = id;
+        return this;
+    }
+
     public Recipe build() {
-        return new Recipe(this.title,this.description,this.ingredients,this.tags);
+        return new Recipe(this.title,this.description,this.ingredients,this.tags,this.id);
     }
 }

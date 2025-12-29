@@ -3,8 +3,6 @@ package be.uantwerpen.sd.project.view;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.MealType;
@@ -18,6 +16,7 @@ public class View implements  PropertyChangeListener{
     private final Model model;
     private final Controller controller;
     private final RenderPort ui;
+    private Recipe currentSelection;
     private final Stage stage;
     
     public View(Model model, Controller controller, RenderPort ui, Stage stage) {
@@ -29,17 +28,17 @@ public class View implements  PropertyChangeListener{
         refreshAll();
     }
 
-    // public void GetRecipe(String day,MealType mealtype) {
-    //     try {
-    //         this.controller.chooseRecipe(day,mealtype);
-    //     } catch (Exception e) {
-    //         this.ui.showError(e.getMessage());
-    //     }
-    // }
+    public void GetRecipe(String day,MealType mealtype) {
+        try {
+            this.controller.getRecipe(day,mealtype);
+        } catch (Exception e) {
+            this.ui.showError(e.getMessage());
+        }
+    }
 
     public void onSetRecipe(String day,MealType mealtype,Recipe r) {
         try {
-            this.controller.updateRecipe(day, mealtype, r);
+            this.controller.updateMeal(day, mealtype, r);
         } catch (Exception e) {
             this.ui.showError(e.getMessage());
         }
@@ -61,12 +60,8 @@ public class View implements  PropertyChangeListener{
         }
     }
 
-    public void onAddRecipe(String title,String descr,Map<String, Double> I, List<String> tags ) {
+    public void onAddRecipe(String title,String descr,List<Ingredient> i, List<String> tags ) {
         try {
-            List<Ingredient> i = I.entrySet()
-                .stream()
-                .map(entry -> new Ingredient(entry.getKey(), entry.getValue(),""))
-                .collect(Collectors.toList());
             Recipe r = Recipe.builder()
                 .title(title)
                 .description(descr)
@@ -74,16 +69,41 @@ public class View implements  PropertyChangeListener{
                 .tags(tags)
                 .build();
             this.controller.AddRecipe(r);
+            refreshAll();
         } catch (Exception e) {
             this.ui.showError(e.getMessage());
         }
+    }
+
+    public void onUpdateRecipe(Recipe updated) {
+        this.controller.updateRecipe(updated);
+        refreshAll();
+    }
+
+    public void onDeleteSelected(Recipe sel) {
+        if (sel != null) {
+            this.controller.removeRecipe(sel);
+        }
+    }
+
+    public void onSelectionChanged(Recipe sel) {
+        currentSelection = sel;
+        ui.setActionsEnabled(sel != null);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         Object nv = evt.getNewValue();
         if (!(nv instanceof RegistrationEventType re)) return;
+        if (re == RegistrationEventType.RECIPE_ADDED
+                || re == RegistrationEventType.RECIPE_REMOVED
+                || re == RegistrationEventType.RECIPE_UPDATED) {
+            ui.showRecipes(model.getRecipes());
+        }
     }
 
-    private void refreshAll() {}
+    private void refreshAll() {
+        ui.showRecipes(model.getRecipes());
+        ui.setActionsEnabled(false);
+    }
 }

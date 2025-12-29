@@ -2,6 +2,7 @@ package be.uantwerpen.sd.project.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 
 import be.uantwerpen.sd.project.DayPlan;
 import be.uantwerpen.sd.project.MealType;
@@ -26,11 +27,11 @@ public class MealPlannerDB implements Model{
         return r;
     }
     @Override
-    public void updateRecipe(String day,MealType mealType,Recipe r) {
+    public void updateMeal(String day,MealType mealType,Recipe r) {
         DayPlan d = this.weeklyplan.getDay(day);
         d.setMeal(mealType, r);
         this.weeklyplan.setDay(day,d);
-        fire(RegistrationEventType.RECIPE_UPDATED);
+        fire(RegistrationEventType.MEAL_CHANGED);
     }
     @Override
     public void setStrategy(MealPlanningStrategy strategy) {
@@ -46,6 +47,25 @@ public class MealPlannerDB implements Model{
         return this.weeklyplan;
     }
     @Override
+    public void AddRecipe(Recipe r) {
+        this.recipeRepo.addRecipe(r);
+        fire(RegistrationEventType.RECIPE_ADDED);
+    }
+    @Override
+    public void updateRecipe(Recipe r) {
+        this.recipeRepo.updateRecipe(r);
+        fire(RegistrationEventType.RECIPE_UPDATED);
+    }
+    @Override
+    public void removeRecipe(Recipe r) {
+        this.recipeRepo.removeRecipe(r);
+        fire(RegistrationEventType.RECIPE_REMOVED);
+    }
+    @Override
+    public List<Recipe> getRecipes() {
+        return this.recipeRepo.getAll();
+    }
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener l) {
         pcs.addPropertyChangeListener(l);
     }
@@ -53,10 +73,6 @@ public class MealPlannerDB implements Model{
     @Override
     public void removePropertyChangeListener(PropertyChangeListener l) {
         pcs.removePropertyChangeListener(l);
-    }
-    @Override
-    public void AddRecipe(Recipe r) {
-        this.recipeRepo.addRecipe(r);
     }
     // private void fire(RegistrationEventType evt) {
     //     pcs.firePropertyChange("registration", null, evt);

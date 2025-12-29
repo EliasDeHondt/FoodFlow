@@ -22,12 +22,12 @@ public class Recipe {
             .build();
     }
 
-    public Recipe(String title, String description, List<Ingredient> ingredients, List<String> tags) {
+    public Recipe(String title, String description, List<Ingredient> ingredients, List<String> tags,int id) {
         this.title = title;
         this.description = description;
         this.ingredients = ingredients;
         this.tags = tags;
-        this.id = -1;
+        this.id = id;
     }
 
     public void addIngredient(Ingredient i) {
@@ -61,8 +61,14 @@ public class Recipe {
     public List<String> getTags() {
         return this.tags;
     }
-    public void addId(Integer id) {
-        this.id = id;
+    public Recipe addId(Integer id) {
+        return Recipe.builder()
+        .title(this.title)
+        .description(this.description)
+        .ingredients(this.ingredients)
+        .tags(this.tags)
+        .id(id)
+        .build();
     }
     public int getId() {
         if (id == -1) {

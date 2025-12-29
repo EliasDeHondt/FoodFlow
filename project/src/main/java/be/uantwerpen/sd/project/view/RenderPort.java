@@ -1,7 +1,15 @@
 package be.uantwerpen.sd.project.view;
 
+import java.util.List;
+
+import be.uantwerpen.sd.project.builder.Recipe;
+
 public interface RenderPort {
-    // public void displayWeeklyPlan(WeeklyPlan plan);
-    // public void displayGroceryList(Map<String, Double> items,DayPlan day);
+    void showRecipes(List<Recipe> recipes);
+
+    void clearInputs();
+
+    void setActionsEnabled(boolean hasSelection);
+
     void showError(String message);
 }

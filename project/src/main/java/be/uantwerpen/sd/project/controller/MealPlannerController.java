@@ -20,20 +20,20 @@ public class MealPlannerController implements Controller{
     public MealPlannerController(Model db) {
         this.db = db;
     }
-    // @Override
-    // public void chooseRecipe(String day,MealType mealtype) {
-    //     if (norm(day) != null) {
-    //     MealType m = mealtype;
-    //     db.chooseRecipe(day, m);}
-    //     else {
-    //         throw new IllegalArgumentException("Please provide both a day and a meal type.");
-    //     }
-    // }
     @Override
-    public void updateRecipe(String day,MealType mealtype,Recipe r) {
+    public void getRecipe(String day,MealType mealtype) {
         if (norm(day) != null) {
         MealType m = mealtype;
-        db.updateRecipe(day, m, r);}
+        db.chooseRecipe(day, m);}
+        else {
+            throw new IllegalArgumentException("Please provide both a day and a meal type.");
+        }
+    }
+    @Override
+    public void updateMeal(String day,MealType mealtype,Recipe r) {
+        if (norm(day) != null) {
+        MealType m = mealtype;
+        db.updateMeal(day, m, r);}
         else {
             throw new IllegalArgumentException("Please provide both a day, meal type and recipe.");
         }
@@ -52,6 +52,14 @@ public class MealPlannerController implements Controller{
     }
     @Override
     public void AddRecipe(Recipe r) {
-        
+        this.db.AddRecipe(r);
+    }
+    @Override
+    public void updateRecipe(Recipe r) {
+        this.db.updateRecipe(r);
+    }
+    @Override
+    public void removeRecipe(Recipe r) {
+        this.db.removeRecipe(r);
     }
 }

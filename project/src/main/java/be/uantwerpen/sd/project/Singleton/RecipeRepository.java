@@ -23,11 +23,14 @@ public class RecipeRepository {
     }
 
     public void addRecipe(Recipe r) {
-        this.recipes.put(nextId(), r);
+        this.recipes.put(nextId(), r.addId(counter));
     }
 
     public void removeRecipe(Recipe r) {
         this.recipes.remove(r.getId(),r);
+    }
+    public void removeRecipe(int  id) {
+        this.recipes.remove(id);
     }
 
     public void updateRecipe(Recipe updated) {
