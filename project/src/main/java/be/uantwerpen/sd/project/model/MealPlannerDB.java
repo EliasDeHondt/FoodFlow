@@ -3,9 +3,9 @@ package be.uantwerpen.sd.project.model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
-import java.util.Map;
 
 import be.uantwerpen.sd.project.DayPlan;
+import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.MealType;
 import be.uantwerpen.sd.project.Singleton.RecipeRepository;
 import be.uantwerpen.sd.project.builder.Recipe;
@@ -24,8 +24,19 @@ public class MealPlannerDB implements Model{
         this.weeklyplan = new WeeklyPlan();
         this.grocerylist = new GroceryList();
     }
-    public Map<String,Double> getGroceries() {
+    @Override
+    public List<Ingredient> getGroceries() {
         return this.grocerylist.getItems();
+    }
+    @Override
+    public void addGrocery(Ingredient i) {
+        this.grocerylist.addItem(i.getName(), i);
+        fire(RegistrationEventType.GROCERIES_CHANGED);
+    }
+    @Override
+    public void removeGrocery(Ingredient i) {
+        this.grocerylist.checkOffItem(i);
+        fire(RegistrationEventType.GROCERIES_CHANGED);
     }
     @Override
     public void updateMeal(String day,MealType mealType,Recipe r) {
@@ -84,9 +95,7 @@ public class MealPlannerDB implements Model{
     public void removePropertyChangeListener(PropertyChangeListener l) {
         pcs.removePropertyChangeListener(l);
     }
-    // private void fire(RegistrationEventType evt) {
-    //     pcs.firePropertyChange("registration", null, evt);
-    // }
+
     private void fire(RegistrationEventType evt) {
         pcs.firePropertyChange("registration", null, evt);
     }

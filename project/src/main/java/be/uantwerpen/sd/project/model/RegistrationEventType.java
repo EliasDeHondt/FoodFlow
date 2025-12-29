@@ -4,5 +4,6 @@ public enum RegistrationEventType {
     RECIPE_ADDED,
     RECIPE_REMOVED,
     RECIPE_UPDATED,
-    MEAL_CHANGED
+    MEAL_CHANGED,
+    GROCERIES_CHANGED
 }

@@ -19,7 +19,7 @@ public class View implements  PropertyChangeListener{
     private final Controller controller;
     private final RenderPort ui;
     private final RenderPort ui2;
-    private Recipe currentSelection;
+    // private Recipe currentSelection;
     private final Stage stage;
     
     public View(Model model, Controller controller, RenderPort ui, RenderPort ui2, Stage stage) {
@@ -92,9 +92,25 @@ public class View implements  PropertyChangeListener{
         }
     }
 
+    public void onDeleteSelected(Ingredient sel) {
+        if (sel != null) {
+            this.controller.removeGrocery(sel);
+        }
+    }
+
+    public void onAddgrocery(String name,String amount,String unit) {
+        this.controller.addGrocery(name.trim(), amount.trim(), unit.trim());
+        refreshAll();
+    }
+
     public void onSelectionChanged(Recipe sel) {
-        currentSelection = sel;
+        // currentSelection = sel;
         ui.setActionsEnabled(sel != null);
+    }
+
+    public void onSelectionChanged(Ingredient sel) {
+        // currentSelection = sel;
+        ui2.setActionsEnabled(sel != null);
     }
 
     @Override
@@ -107,11 +123,16 @@ public class View implements  PropertyChangeListener{
             ui.showRecipes(model.getRecipes());
         } else if (re == RegistrationEventType.MEAL_CHANGED) {
             ui.showMeals(model.getWeeklyPlan());
+            ui2.showGroceries(model.getGroceries());
+        } else if (re == RegistrationEventType.GROCERIES_CHANGED) {
+            ui2.showGroceries(model.getGroceries());
         }
     }
 
     private void refreshAll() {
         ui.showRecipes(model.getRecipes());
+        ui2.showGroceries(model.getGroceries());
         ui.setActionsEnabled(false);
+        ui2.setActionsEnabled(false);
     }
 }

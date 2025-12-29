@@ -1,5 +1,6 @@
 package be.uantwerpen.sd.project.controller;
 
+import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.MealType;
 import be.uantwerpen.sd.project.builder.Recipe;
 import be.uantwerpen.sd.project.model.Model;
@@ -19,6 +20,21 @@ public class MealPlannerController implements Controller{
 
     public MealPlannerController(Model db) {
         this.db = db;
+    }
+    @Override
+    public void addGrocery(String name,String amount,String unit) {
+        if (norm(name) != null && norm(amount) != null && norm(unit) != null) {
+            Double quantity = Double.valueOf(amount);
+            Ingredient i = new Ingredient(name, quantity, unit);
+            this.db.addGrocery(i);
+        }
+        else {
+            throw new IllegalArgumentException("Please provide both a name, amount and unit.");
+        }
+    }
+    @Override
+    public void removeGrocery(Ingredient i) {
+        this.db.removeGrocery(i);
     }
     @Override
     public void updateMeal(String day,MealType mealtype,Recipe r) {

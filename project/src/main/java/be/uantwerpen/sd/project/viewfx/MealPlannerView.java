@@ -121,6 +121,13 @@ public class MealPlannerView extends BorderPane implements RenderPort {
             if (logic != null) logic.onGenerateWeeklyPlan();
         });
 
+        removeMealButton.setOnAction(e -> {
+           
+        });
+        changeMealButton.setOnAction(e -> {
+           
+        });
+
         toggleForm(false);
         addBackgroundDeselect(RecipeList);
         
@@ -282,7 +289,7 @@ public class MealPlannerView extends BorderPane implements RenderPort {
                     try {
                         double amount = Double.parseDouble(amountText);
                         ingredients.add(new Ingredient(name, amount, units));
-                    } catch (Exception e) {showError("Please use a number for amount");}
+                    } catch (NumberFormatException e) {showError("Please use a number for amount");}
                 }
             }
         }
@@ -371,6 +378,8 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         }
         buildWeeklyPlan();
     }
+    @Override  
+    public void showGroceries(List<Ingredient> g) {}
 
     @Override
     public void clearInputs() {

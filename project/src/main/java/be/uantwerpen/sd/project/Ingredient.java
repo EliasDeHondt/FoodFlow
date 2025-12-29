@@ -22,4 +22,15 @@ public class Ingredient {
     public String getUnit() {
         return this.unit;
     }
+
+    public Ingredient add(Ingredient other) {
+        if (!this.name.equalsIgnoreCase(other.name)) {
+            throw new IllegalArgumentException("Ingredients must have the same name");
+        }
+        return new Ingredient(
+            this.name,
+            this.quantity + other.quantity,
+            this.unit // keep the first unit
+        );
+    }
 }
