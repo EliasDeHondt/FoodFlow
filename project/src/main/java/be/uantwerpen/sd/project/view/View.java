@@ -99,8 +99,11 @@ public class View implements  PropertyChangeListener{
     }
 
     public void onAddgrocery(String name,String amount,String unit) {
-        this.controller.addGrocery(name.trim(), amount.trim(), unit.trim());
+        try { this.controller.addGrocery(name.trim(), amount.trim(), unit.trim());
         refreshAll();
+        } catch (Exception e) {
+            this.ui.showError(e.getMessage());
+        }
     }
 
     public void onSelectionChanged(Recipe sel) {
