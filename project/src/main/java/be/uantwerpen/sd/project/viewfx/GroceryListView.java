@@ -52,23 +52,28 @@ public class GroceryListView extends BorderPane implements RenderPort {
     public GroceryListView() {
         VBox top = new VBox(12, changePageButton);
         top.setPadding(new Insets(12));
-        top.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;");
-        changePageButton.setStyle("-fx-font-size: 12; -fx-padding: 8 16 8 16; -fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand;");
+        top.setStyle("-fx-background-color: #ffffff; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;");
+        changePageButton.setStyle("-fx-font-size: 12; -fx-padding: 10 20 10 20; -fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 4;");
         setTop(top);
 
         Label centerTitle = new Label("Shopping List");
         centerTitle.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;");
-        VBox center = new VBox(8, centerTitle, GroceryList);
-        center.setPadding(new Insets(12));
+
+        VBox centerHeader = new VBox(centerTitle);
+        centerHeader.setPadding(new Insets(12));
+        centerHeader.setStyle("-fx-background-color: #ffffff; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;");
+
+        VBox center = new VBox();
+        center.getChildren().addAll(centerHeader, GroceryList);
         center.setStyle("-fx-background-color: #ffffff;");
         VBox.setVgrow(GroceryList, Priority.ALWAYS);
         setCenter(center);
 
         VBox right = new VBox(12);
         right.setPadding(new Insets(12));
-        right.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 0 1;");
+        right.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #d0d0d0; -fx-border-width: 0 0 0 1;");
 
-        addGroceryButton.setStyle("-fx-font-size: 12; -fx-padding: 8 16 8 16; -fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
+        addGroceryButton.setStyle("-fx-font-size: 12; -fx-padding: 10 16 10 16; -fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand; -fx-border-radius: 4;");
         addGroceryButton.setOnAction(e -> toggleForm(true));
 
         buildGroceryForm();

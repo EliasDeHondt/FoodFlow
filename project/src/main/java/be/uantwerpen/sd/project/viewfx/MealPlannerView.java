@@ -172,33 +172,53 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         String[] tags = {"Vegan", "Breakfast", "Lunch", "Dinner", "Snack"};
 
         FlowPane tagPane = new FlowPane();
-        tagPane.setHgap(5);
-        tagPane.setVgap(5);
+        tagPane.setHgap(8);
+        tagPane.setVgap(8);
         tagPane.setPrefWrapLength(0);
         for (String tag : tags) {
             CheckBox checkBox = new CheckBox(tag);
+            checkBox.setStyle("-fx-font-size: 12;");
             tagPane.getChildren().add(checkBox);
         }
 
         Button addIngredientBtn = new Button("Add Ingredient");
+        addIngredientBtn.setStyle("-fx-font-size: 11; -fx-padding: 6 12 6 12; -fx-background-color: #3498db; -fx-text-fill: white; -fx-border-radius: 3; -fx-cursor: hand;");
         addIngredientBtn.setOnAction(e -> addIngredientRow(ingredientsBox));
+
+        // Style text fields
+        nameField.setStyle("-fx-padding: 8 10 8 10; -fx-border-color: #d0d0d0; -fx-border-radius: 3; -fx-font-size: 12;");
+        nameField.setPromptText("Recipe name...");
+        descriptionField.setStyle("-fx-padding: 8 10 8 10; -fx-border-color: #d0d0d0; -fx-border-radius: 3; -fx-font-size: 12;");
+        descriptionField.setPromptText("Description...");
 
         GridPane grid = new GridPane();
         grid.setHgap(8);
-        grid.setVgap(8);
-        grid.add(new Label("Name"), 0, 0);
-        grid.add(nameField, 1, 0);
-        grid.add(new Label("Description"), 0, 1);
-        grid.add(descriptionField, 1, 1);
-        grid.add(new Label("Ingredients"), 0, 2);
-        grid.add(scrollPane, 0, 3, 2, 1);
-        grid.add(addIngredientBtn, 1, 4);
-        grid.add(new Label("Tags"), 0, 5);
-        grid.add(tagPane, 0, 6, 2, 1);
-    
+        grid.setVgap(12);
+
+        Label nameLabel = new Label("Name");
+        nameLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+        Label descLabel = new Label("Description");
+        descLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+        Label ingLabel = new Label("Ingredients");
+        ingLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+        Label tagLabel = new Label("Tags");
+        tagLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+
+        grid.add(nameLabel, 0, 0);
+        grid.add(nameField, 0, 1);
+        grid.add(descLabel, 0, 2);
+        grid.add(descriptionField, 0, 3);
+        grid.add(ingLabel, 0, 4);
+        grid.add(scrollPane, 0, 5);
+        grid.add(addIngredientBtn, 0, 6);
+        grid.add(tagLabel, 0, 7);
+        grid.add(tagPane, 0, 8);
 
         Button save = new Button("Save");
         Button cancel = new Button("Cancel");
+
+        save.setStyle("-fx-font-size: 12; -fx-padding: 8 16 8 16; -fx-background-color: #27ae60; -fx-text-fill: white; -fx-border-radius: 3; -fx-cursor: hand;");
+        cancel.setStyle("-fx-font-size: 12; -fx-padding: 8 16 8 16; -fx-background-color: #95a5a6; -fx-text-fill: white; -fx-border-radius: 3; -fx-cursor: hand;");
 
         save.setOnAction(e -> {
             if (logic != null) logic.onAddRecipe(nameField.getText(),descriptionField.getText(),getIngredients(ingredientsBox),getTags(tagPane));
@@ -212,7 +232,12 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         });
 
         HBox buttons = new HBox(8, save, cancel);
-        formBox.getChildren().setAll(new Label("Add recipe"), grid, buttons);
+        buttons.setPadding(new Insets(12, 0, 0, 0));
+
+        Label formTitle = new Label("Add Recipe");
+        formTitle.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;");
+
+        formBox.getChildren().setAll(formTitle, grid, buttons);
     }
 
     private void showEditRecipeDialog(Recipe sel) {
@@ -373,43 +398,55 @@ public class MealPlannerView extends BorderPane implements RenderPort {
     private void buildWeeklyPlan() {
 
         GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(10));
+        grid.setHgap(8);
+        grid.setVgap(8);
+        grid.setPadding(new Insets(12));
+        grid.setStyle("-fx-background-color: #ffffff;");
 
         String[] dayNames = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
         MealType[] meals = {MealType.BREAKFAST, MealType.LUNCH, MealType.DINNER, MealType.SNACK};
 
+        // Header row - meal types
         for (int col = 0; col < meals.length; col++) {
-            grid.add(new Label(meals[col].name().toLowerCase()), col + 1, 0);
+            Label header = new Label(meals[col].name().substring(0, 3).toUpperCase());
+            header.setStyle("-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #3498db; -fx-padding: 8; -fx-alignment: center;");
+            header.setPrefWidth(85);
+            header.setAlignment(Pos.CENTER);
+            grid.add(header, col + 1, 0);
         }
 
+        // Day column labels
         for (int row = 0; row < dayNames.length; row++) {
-            grid.add(new Label(dayNames[row]), 0, row + 1);
+            Label dayLabel = new Label(dayNames[row]);
+            dayLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #e74c3c; -fx-padding: 8; -fx-alignment: center;");
+            dayLabel.setPrefWidth(50);
+            dayLabel.setAlignment(Pos.CENTER);
+            grid.add(dayLabel, 0, row + 1);
         }
 
+        // Meal cells
         for (int row = 0; row < 7; row++) {
-
             for (int col = 0; col < meals.length; col++) {
                 Label label;
-
                 Recipe recipe = plan[row][col];
                 label = new Label(recipe == null ? "No meal" : recipe.getTitle());
 
-                label.setPrefWidth(80);
+                label.setPrefWidth(85);
+                label.setPrefHeight(60);
                 label.setAlignment(Pos.CENTER);
-                label.setStyle("-fx-border-color: lightgray; -fx-padding: 5; -fx-cursor: hand;");
+                label.setWrapText(true);
+                label.setStyle("-fx-border-color: #d0d0d0; -fx-border-width: 1; -fx-padding: 8; -fx-cursor: hand; -fx-font-size: 11; -fx-background-color: #f8f9fa;");
 
                 final int dayIndex = row;
                 final int mealIndex = col;
                 label.setOnMouseClicked(e -> {
                     if (selectedMealLabel != null) {
-                        selectedMealLabel.setStyle("-fx-border-color: lightgray; -fx-padding: 5; -fx-cursor: hand;");
+                        selectedMealLabel.setStyle("-fx-border-color: #d0d0d0; -fx-border-width: 1; -fx-padding: 8; -fx-cursor: hand; -fx-font-size: 11; -fx-background-color: #f8f9fa;");
                     }
                     selectedDayIndex = dayIndex;
                     selectedMealIndex = mealIndex;
                     selectedMealLabel = label;
-                    label.setStyle("-fx-border-color: blue; -fx-border-width: 2; -fx-padding: 5; -fx-cursor: hand;");
+                    label.setStyle("-fx-border-color: #3498db; -fx-border-width: 2; -fx-padding: 8; -fx-cursor: hand; -fx-font-size: 11; -fx-background-color: #e3f2fd;");
                 });
 
                 grid.add(label, col + 1, row + 1);
