@@ -1,8 +1,12 @@
-package be.uantwerpen.sd.project.model;
+/**
+ * @author Elias De Hondt
+ * @see https://eliasdh.com
+ * @since 01/01/2026
+ **/
 
+package be.uantwerpen.sd.project.model;
 import java.beans.PropertyChangeListener;
 import java.util.List;
-
 import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.MealType;
 import be.uantwerpen.sd.project.builder.Recipe;

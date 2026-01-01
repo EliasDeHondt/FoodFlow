@@ -1,3 +1,9 @@
+/**
+ * @author Elias De Hondt
+ * @see https://eliasdh.com
+ * @since 01/01/2026
+ **/
+
 package be.uantwerpen.sd.project;
 
 public class Ingredient {
@@ -30,7 +36,20 @@ public class Ingredient {
         return new Ingredient(
             this.name,
             this.quantity + other.quantity,
-            this.unit // keep the first unit
+            this.unit
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ingredient that = (Ingredient) o;
+        return name.equalsIgnoreCase(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.toLowerCase().hashCode();
     }
 }

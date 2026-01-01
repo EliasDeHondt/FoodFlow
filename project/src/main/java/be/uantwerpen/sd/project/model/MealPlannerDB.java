@@ -1,9 +1,13 @@
-package be.uantwerpen.sd.project.model;
+/**
+ * @author Elias De Hondt
+ * @see https://eliasdh.com
+ * @since 01/01/2026
+ **/
 
+package be.uantwerpen.sd.project.model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
-
 import be.uantwerpen.sd.project.DayPlan;
 import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.MealType;
@@ -25,6 +29,8 @@ public class MealPlannerDB implements Model{
         this.weeklyplan = new WeeklyPlan();
         this.grocerylist = new GroceryList();
         this.mealplanstrategy = new DefaultMealPlanStrategy();
+
+        this.weeklyplan.addObserver(this.grocerylist);
     }
     @Override
     public List<Ingredient> getGroceries() {

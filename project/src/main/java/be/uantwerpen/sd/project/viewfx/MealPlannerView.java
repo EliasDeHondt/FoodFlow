@@ -1,3 +1,9 @@
+/**
+ * @author Elias De Hondt
+ * @see https://eliasdh.com
+ * @since 01/01/2026
+ **/
+
 package be.uantwerpen.sd.project.viewfx;
 
 import java.util.ArrayList;
@@ -55,6 +61,10 @@ public class MealPlannerView extends BorderPane implements RenderPort {
 
     private View logic;
 
+    private int selectedDayIndex = -1;
+    private int selectedMealIndex = -1;
+    private Label selectedMealLabel;
+
     public MealPlannerView() {
 
         buildWeeklyPlan();
@@ -65,7 +75,6 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         setLeft(left);
         
         Label centerTitle = new Label("Recipes");
-        // HBox centerHeader = new HBox(8, centerTitle);
         VBox center = new VBox(8, centerTitle, RecipeList);
         center.setPadding(new Insets(8));
         setCenter(center);
@@ -124,10 +133,26 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         });
 
         removeMealButton.setOnAction(e -> {
-           
+            if (selectedDayIndex >= 0 && selectedMealIndex >= 0) {
+                String[] dayNames = {"mon","tue","wed","thu","fri","sat","sun"};
+                MealType[] meals = {MealType.BREAKFAST, MealType.LUNCH, MealType.DINNER, MealType.SNACK};
+                if (logic != null) {
+                    logic.onSetRecipe(dayNames[selectedDayIndex], meals[selectedMealIndex]);
+                }
+            }
         });
+
         changeMealButton.setOnAction(e -> {
-           
+            if (selectedDayIndex >= 0 && selectedMealIndex >= 0) {
+                Recipe sel = RecipeList.getSelectionModel().getSelectedItem();
+                if (sel != null) {
+                    String[] dayNames = {"mon","tue","wed","thu","fri","sat","sun"};
+                    MealType[] meals = {MealType.BREAKFAST, MealType.LUNCH, MealType.DINNER, MealType.SNACK};
+                    if (logic != null) {
+                        logic.onSetRecipe(dayNames[selectedDayIndex], meals[selectedMealIndex], sel);
+                    }
+                }
+            }
         });
 
         toggleForm(false);
@@ -355,17 +380,14 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         String[] dayNames = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
         MealType[] meals = {MealType.BREAKFAST, MealType.LUNCH, MealType.DINNER, MealType.SNACK};
 
-        // Headers voor maaltijden
         for (int col = 0; col < meals.length; col++) {
             grid.add(new Label(meals[col].name().toLowerCase()), col + 1, 0);
         }
 
-        // Headers voor dagen
         for (int row = 0; row < dayNames.length; row++) {
             grid.add(new Label(dayNames[row]), 0, row + 1);
         }
 
-        // Vul de grid met data
         for (int row = 0; row < 7; row++) {
 
             for (int col = 0; col < meals.length; col++) {
@@ -376,6 +398,20 @@ public class MealPlannerView extends BorderPane implements RenderPort {
 
                 label.setPrefWidth(80);
                 label.setAlignment(Pos.CENTER);
+                label.setStyle("-fx-border-color: lightgray; -fx-padding: 5; -fx-cursor: hand;");
+
+                final int dayIndex = row;
+                final int mealIndex = col;
+                label.setOnMouseClicked(e -> {
+                    if (selectedMealLabel != null) {
+                        selectedMealLabel.setStyle("-fx-border-color: lightgray; -fx-padding: 5; -fx-cursor: hand;");
+                    }
+                    selectedDayIndex = dayIndex;
+                    selectedMealIndex = mealIndex;
+                    selectedMealLabel = label;
+                    label.setStyle("-fx-border-color: blue; -fx-border-width: 2; -fx-padding: 5; -fx-cursor: hand;");
+                });
+
                 grid.add(label, col + 1, row + 1);
             }
         }
@@ -424,7 +460,14 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         for (int i = 0; i < plan.length; i++) {
             System.arraycopy(meals[i], 0, plan[i], 0, plan[i].length);
         }
-        buildWeeklyPlan();
+        Platform.runLater(() -> {
+            buildWeeklyPlan();
+            selectedDayIndex = -1;
+            selectedMealIndex = -1;
+            selectedMealLabel = null;
+            changeMealButton.setDisable(true);
+            removeMealButton.setDisable(true);
+        });
     }
     @Override  
     public void showGroceries(List<Ingredient> g) {}
@@ -444,8 +487,7 @@ public class MealPlannerView extends BorderPane implements RenderPort {
         Platform.runLater(() -> {
             editRecipeButton.setDisable(!hasSelection);
             deleteRecipeButton.setDisable(!hasSelection);
-            changeMealButton.setDisable(!hasSelection);
-            removeMealButton.setDisable(!hasSelection);
+            changeMealButton.setDisable(!hasSelection || selectedDayIndex < 0 || selectedMealIndex < 0);
         });
     }
 

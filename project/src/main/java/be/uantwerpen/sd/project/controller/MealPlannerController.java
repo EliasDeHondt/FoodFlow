@@ -1,5 +1,10 @@
-package be.uantwerpen.sd.project.controller;
+/**
+ * @author Elias De Hondt
+ * @see https://eliasdh.com
+ * @since 01/01/2026
+ **/
 
+package be.uantwerpen.sd.project.controller;
 import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.MealType;
 import be.uantwerpen.sd.project.builder.Recipe;
@@ -10,7 +15,6 @@ import be.uantwerpen.sd.project.strategy.VegetarianMealPlanStrategy;
 
 public class MealPlannerController implements Controller{
     private final Model db;
-    //extra logic voor parsen en datatransmission
 
     private static String norm(String s) {
         if (s == null) return null;

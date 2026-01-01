@@ -1,9 +1,13 @@
-package be.uantwerpen.sd.project.strategy;
+/**
+ * @author Elias De Hondt
+ * @see https://eliasdh.com
+ * @since 01/01/2026
+ **/
 
+package be.uantwerpen.sd.project.strategy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import be.uantwerpen.sd.project.DayPlan;
 import be.uantwerpen.sd.project.MealType;
 import be.uantwerpen.sd.project.Singleton.RecipeRepository;
@@ -23,16 +27,23 @@ public class DefaultMealPlanStrategy implements MealPlanningStrategy {
         List<Recipe> snack = new ArrayList<>();
         
         for (Recipe r : recipes) {
-            if (r.getTags().contains("breakfast") || r.getTags().isEmpty() || r.getTags().contains("vegan")) {
+            List<String> tags = r.getTags();
+
+            boolean hasNoMealTags = !tags.contains("breakfast") &&
+                                    !tags.contains("lunch") &&
+                                    !tags.contains("dinner") &&
+                                    !tags.contains("snack");
+
+            if (r.getTags().contains("breakfast") || hasNoMealTags) {
                 breakfast.add(r);
             }
-            if (r.getTags().contains("lunch") || r.getTags().isEmpty() || r.getTags().contains("vegan")) {
+            if (r.getTags().contains("lunch") || hasNoMealTags) {
                 lunch.add(r);
             }
-            if (r.getTags().contains("dinner") || r.getTags().isEmpty() || r.getTags().contains("vegan")) {
+            if (r.getTags().contains("dinner") || hasNoMealTags) {
                 dinner.add(r);
             }
-            if (r.getTags().contains("snack") || r.getTags().isEmpty() || r.getTags().contains("vegan")) {
+            if (r.getTags().contains("snack") || hasNoMealTags) {
                 snack.add(r);
             }
         }
@@ -45,14 +56,27 @@ public class DefaultMealPlanStrategy implements MealPlanningStrategy {
         for (int col = 0; col < 7; col++) {
             DayPlan day = new DayPlan();
             Random random = new Random();
-            Recipe r = breakfast.get(random.nextInt(breakfast.size()));
-            day.setMeal(MealType.BREAKFAST, r);
-            r = lunch.get(random.nextInt(lunch.size()));
-            day.setMeal(MealType.LUNCH, r);
-            r = dinner.get(random.nextInt(dinner.size()));
-            day.setMeal(MealType.DINNER, r);
-            r = snack.get(random.nextInt(snack.size()));
-            day.setMeal(MealType.SNACK, r);
+
+            if (!breakfast.isEmpty()) {
+                Recipe r = breakfast.get(random.nextInt(breakfast.size()));
+                day.setMeal(MealType.BREAKFAST, r);
+            }
+
+            if (!lunch.isEmpty()) {
+                Recipe r = lunch.get(random.nextInt(lunch.size()));
+                day.setMeal(MealType.LUNCH, r);
+            }
+
+            if (!dinner.isEmpty()) {
+                Recipe r = dinner.get(random.nextInt(dinner.size()));
+                day.setMeal(MealType.DINNER, r);
+            }
+
+            if (!snack.isEmpty()) {
+                Recipe r = snack.get(random.nextInt(snack.size()));
+                day.setMeal(MealType.SNACK, r);
+            }
+
             weeklyplan.setDay(dayNames[col], day);
         }
     }

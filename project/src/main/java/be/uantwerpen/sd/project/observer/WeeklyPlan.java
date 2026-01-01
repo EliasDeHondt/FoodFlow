@@ -1,5 +1,10 @@
-package be.uantwerpen.sd.project.observer;
+/**
+ * @author Elias De Hondt
+ * @see https://eliasdh.com
+ * @since 01/01/2026
+ **/
 
+package be.uantwerpen.sd.project.observer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

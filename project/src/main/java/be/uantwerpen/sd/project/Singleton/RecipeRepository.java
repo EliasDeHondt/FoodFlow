@@ -1,6 +1,10 @@
+/**
+ * @author Elias De Hondt
+ * @see https://eliasdh.com
+ * @since 01/01/2026
+ **/
+
 package be.uantwerpen.sd.project.Singleton;
-
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +39,6 @@ public class RecipeRepository {
 
     public void updateRecipe(Recipe updated) {
         recipes.put(updated.getId(), updated);
-        //perhaps observers otherwise changing grocerylist
     }
 
     public List<Recipe> getAll() {

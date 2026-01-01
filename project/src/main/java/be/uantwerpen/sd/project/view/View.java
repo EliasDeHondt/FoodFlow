@@ -1,9 +1,13 @@
-package be.uantwerpen.sd.project.view;
+/**
+ * @author Elias De Hondt
+ * @see https://eliasdh.com
+ * @since 01/01/2026
+ **/
 
+package be.uantwerpen.sd.project.view;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
-
 import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.MealType;
 import be.uantwerpen.sd.project.builder.Recipe;
@@ -14,14 +18,13 @@ import be.uantwerpen.sd.project.viewfx.GroceryListView;
 import be.uantwerpen.sd.project.viewfx.MealPlannerView;
 import javafx.stage.Stage;
 
-public class View implements  PropertyChangeListener{
+public class View implements PropertyChangeListener {
     private final Model model;
     private final Controller controller;
     private final RenderPort ui;
     private final RenderPort ui2;
-    // private Recipe currentSelection;
     private final Stage stage;
-    
+
     public View(Model model, Controller controller, RenderPort ui, RenderPort ui2, Stage stage) {
         this.model = model;
         this.controller = controller;
@@ -34,23 +37,23 @@ public class View implements  PropertyChangeListener{
 
     public void ToGroceryList() {
         stage.getScene().setRoot((GroceryListView) ui2);
-        stage.setTitle("GroceryList");
+        stage.setTitle("Grocery List");
     }
 
     public void ToMealPlanner() {
         stage.getScene().setRoot((MealPlannerView) ui);
-        stage.setTitle("MealPlanner");
+        stage.setTitle("Meal Planner");
     }
-    // functie voor Recipe in de WeeklyPlan te veranderen
-    public void onSetRecipe(String day,MealType mealtype,Recipe r) {
+
+    public void onSetRecipe(String day, MealType mealtype, Recipe r) {
         try {
             this.controller.updateMeal(day.toLowerCase(), mealtype, r);
         } catch (Exception e) {
             this.ui.showError(e.getMessage());
         }
     }
-    // functie voor Recipe in de WeeklyPlan te verwijderen
-    public void onSetRecipe(String day,MealType mealtype) {
+
+    public void onSetRecipe(String day, MealType mealtype) {
         try {
             this.controller.removeMeal(day.toLowerCase(), mealtype);
         } catch (Exception e) {
@@ -74,7 +77,7 @@ public class View implements  PropertyChangeListener{
         }
     }
 
-    public void onAddRecipe(String title,String descr,List<Ingredient> i, List<String> tags ) {
+    public void onAddRecipe(String title, String descr, List<Ingredient> i, List<String> tags) {
         try {
             Recipe r = Recipe.builder()
                 .title(title.trim())
@@ -106,21 +109,20 @@ public class View implements  PropertyChangeListener{
         }
     }
 
-    public void onAddgrocery(String name,String amount,String unit) {
-        try { this.controller.addGrocery(name.trim(), amount.trim(), unit.trim());
-        refreshAll();
+    public void onAddgrocery(String name, String amount, String unit) {
+        try {
+            this.controller.addGrocery(name.trim(), amount.trim(), unit.trim());
+            refreshAll();
         } catch (Exception e) {
             this.ui.showError(e.getMessage());
         }
     }
 
     public void onSelectionChanged(Recipe sel) {
-        // currentSelection = sel;
         ui.setActionsEnabled(sel != null);
     }
 
     public void onSelectionChanged(Ingredient sel) {
-        // currentSelection = sel;
         ui2.setActionsEnabled(sel != null);
     }
 

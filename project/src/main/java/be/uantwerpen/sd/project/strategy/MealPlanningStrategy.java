@@ -1,5 +1,10 @@
-package be.uantwerpen.sd.project.strategy;
+/**
+ * @author Elias De Hondt
+ * @see https://eliasdh.com
+ * @since 01/01/2026
+ **/
 
+package be.uantwerpen.sd.project.strategy;
 import be.uantwerpen.sd.project.Singleton.RecipeRepository;
 import be.uantwerpen.sd.project.observer.WeeklyPlan;
 

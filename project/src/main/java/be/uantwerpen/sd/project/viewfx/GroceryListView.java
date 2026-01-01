@@ -1,7 +1,13 @@
+/**
+ * @author Elias De Hondt
+ * @see https://eliasdh.com
+ * @since 01/01/2026
+ **/
+
 package be.uantwerpen.sd.project.viewfx;
-
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.builder.Recipe;
 import be.uantwerpen.sd.project.view.RenderPort;
@@ -10,9 +16,11 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -22,15 +30,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class GroceryListView extends BorderPane implements RenderPort {
     private final ListView<Ingredient> GroceryList = new ListView<>();
+    private final Map<String, Boolean> checkedItems = new HashMap<>();
 
-    private final Button changePageButton = new Button("MealPlanner");
-
-    private final Button checkOffButton = new Button("Check off");
-    private final Button addGroceryButton = new Button("Add");
+    private final Button changePageButton = new Button("Meal Planner");
+    private final Button addGroceryButton = new Button("Add Item");
 
     private final TextField nameField = new TextField();
     private final TextField qtyField = new TextField();
@@ -40,61 +50,102 @@ public class GroceryListView extends BorderPane implements RenderPort {
     private View logic;
 
     public GroceryListView() {
-
         VBox top = new VBox(12, changePageButton);
-        top.setPadding(new Insets(8));
+        top.setPadding(new Insets(12));
+        top.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;");
+        changePageButton.setStyle("-fx-font-size: 12; -fx-padding: 8 16 8 16; -fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand;");
         setTop(top);
 
-        Label centerTitle = new Label("Groceries");
-        // HBox centerHeader = new HBox(8, centerTitle);
+        Label centerTitle = new Label("Shopping List");
+        centerTitle.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;");
         VBox center = new VBox(8, centerTitle, GroceryList);
-        center.setPadding(new Insets(8));
+        center.setPadding(new Insets(12));
+        center.setStyle("-fx-background-color: #ffffff;");
+        VBox.setVgrow(GroceryList, Priority.ALWAYS);
         setCenter(center);
 
-        HBox actions = new HBox(8, addGroceryButton, checkOffButton);
-        actions.setPadding(new Insets(8));
+        VBox right = new VBox(12);
+        right.setPadding(new Insets(12));
+        right.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 0 1;");
+
+        addGroceryButton.setStyle("-fx-font-size: 12; -fx-padding: 8 16 8 16; -fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
+        addGroceryButton.setOnAction(e -> toggleForm(true));
 
         buildGroceryForm();
 
-        VBox right = new VBox(12, actions, formBox);
-        right.setPadding(new Insets(8));
+        right.getChildren().addAll(addGroceryButton, formBox);
         setRight(right);
+
+        GroceryList.setCellFactory(lv -> new ListCell<Ingredient>() {
+            private final CheckBox checkBox = new CheckBox();
+            private final Label label = new Label();
+            private final HBox hbox = new HBox(10);
+
+            {
+                checkBox.setPrefWidth(30);
+                checkBox.setStyle("-fx-font-size: 14;");
+                label.setFont(Font.font("Segoe UI", 13));
+                label.setWrapText(true);
+
+                hbox.setPadding(new Insets(10, 12, 10, 12));
+                hbox.setAlignment(Pos.CENTER_LEFT);
+                hbox.setStyle("-fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0; -fx-background-color: white;");
+
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+                hbox.getChildren().addAll(checkBox, label, spacer);
+            }
+
+            @Override
+            protected void updateItem(Ingredient item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                    return;
+                }
+
+                String itemName = item.getName();
+                String text = String.format("%s  •  %.1f %s",
+                    itemName,
+                    item.getQuantity(),
+                    item.getUnit());
+                label.setText(text);
+
+                boolean isChecked = checkedItems.getOrDefault(itemName, false);
+                checkBox.setSelected(isChecked);
+
+                if (isChecked) {
+                    label.setStyle("-fx-text-fill: #999999; -fx-strikethrough: true;");
+                } else {
+                    label.setStyle("-fx-text-fill: #1a1a1a; -fx-strikethrough: false;");
+                }
+
+                checkBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                    checkedItems.put(itemName, newVal);
+                    if (newVal) {
+                        label.setStyle("-fx-text-fill: #999999; -fx-strikethrough: true;");
+                    } else {
+                        label.setStyle("-fx-text-fill: #1a1a1a; -fx-strikethrough: false;");
+                    }
+                });
+
+                setGraphic(hbox);
+            }
+        });
 
         GroceryList.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
             if (logic != null) logic.onSelectionChanged(newV);
             toggleForm(false);
         });
 
-        GroceryList.setCellFactory(lv -> new ListCell<>() {
-            @Override
-            protected void updateItem(Ingredient e, boolean empty) {
-                super.updateItem(e, empty);
-                if (empty || e == null) {
-                    setText(null);
-                    setOnMouseClicked(ev -> GroceryList.getSelectionModel().clearSelection());
-                    return;
-                }
-                setText(e.getName()+" "+e.getQuantity()+" "+e.getUnit());
-                setOnMouseClicked(null);
-            }
-        });
-
         changePageButton.setOnAction(e -> {
             if (logic != null) logic.ToMealPlanner();
         });
 
-        addGroceryButton.setOnAction(e -> toggleForm(true));
-
-        checkOffButton.setOnAction(e -> {
-            Ingredient sel = GroceryList.getSelectionModel().getSelectedItem();
-            if (logic != null) logic.onDeleteSelected(sel);
-        });
-
         toggleForm(false);
         addBackgroundDeselect(GroceryList);
-
     }
-    
+
     public void attachLogic(View logic) {
         this.logic = logic;
     }
@@ -106,6 +157,14 @@ public class GroceryListView extends BorderPane implements RenderPort {
         UnitBox.setItems(units);
         UnitBox.setEditable(false);
 
+        nameField.setStyle("-fx-padding: 8 10 8 10; -fx-border-color: #e0e0e0; -fx-border-radius: 3; -fx-font-size: 12;");
+        nameField.setPromptText("Item name");
+
+        qtyField.setStyle("-fx-padding: 8 10 8 10; -fx-border-color: #e0e0e0; -fx-border-radius: 3; -fx-font-size: 12;");
+        qtyField.setPromptText("Quantity");
+
+        UnitBox.setStyle("-fx-padding: 8 10 8 10; -fx-border-color: #e0e0e0; -fx-border-radius: 3; -fx-font-size: 12;");
+
         GridPane grid = new GridPane();
         grid.setHgap(8);
         grid.setVgap(8);
@@ -113,25 +172,26 @@ public class GroceryListView extends BorderPane implements RenderPort {
         grid.add(nameField, 1, 0);
         grid.add(new Label("Amount"), 0, 1);
         grid.add(qtyField, 1, 1);
-        grid.add(new Label("Units"), 0, 2);
+        grid.add(new Label("Unit"), 0, 2);
         grid.add(UnitBox, 1, 2);
 
         Button save = new Button("Save");
         Button cancel = new Button("Cancel");
 
+        save.setStyle("-fx-padding: 8 16 8 16; -fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 12;");
+        cancel.setStyle("-fx-padding: 8 16 8 16; -fx-background-color: #95a5a6; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 12;");
+
         save.setOnAction(e -> {
-            if (logic != null) logic.onAddgrocery(nameField.getText(),qtyField.getText(),UnitBox.getValue());
+            if (logic != null) logic.onAddgrocery(nameField.getText(), qtyField.getText(), UnitBox.getValue());
+            clearInputs();
         });
 
         cancel.setOnAction(e -> {
-            nameField.clear();
-            qtyField.clear();
-            UnitBox.getSelectionModel().clearSelection();
-            toggleForm(false);
+            clearInputs();
         });
 
         HBox buttons = new HBox(8, save, cancel);
-        formBox.getChildren().setAll(new Label("Add grocery"), grid, buttons);
+        formBox.getChildren().setAll(new Label("Add New Item"), grid, buttons);
     }
 
     private void toggleForm(boolean show) {
@@ -150,28 +210,20 @@ public class GroceryListView extends BorderPane implements RenderPort {
             }
         });
     }
+
     @Override
     public void showGroceries(List<Ingredient> g) {
         Platform.runLater(() -> {
-            Ingredient prev = GroceryList.getSelectionModel().getSelectedItem();
             GroceryList.getItems().setAll(g);
-            if (prev != null) {
-                for (Ingredient r : g) {
-                    if (prev.equals(r)) {
-                        GroceryList.getSelectionModel().select(r);
-                        break;
-                    }
-                }
-            }
-            if (logic != null) {
-                logic.onSelectionChanged(GroceryList.getSelectionModel().getSelectedItem());
-            }
         });
     }
+
     @Override
     public void showRecipes(List<Recipe> recipes) {}
+
     @Override
     public void showMeals(Recipe[][] meals) {}
+
     @Override
     public void clearInputs() {
         Platform.runLater(() -> {
@@ -181,12 +233,17 @@ public class GroceryListView extends BorderPane implements RenderPort {
             toggleForm(false);
         });
     }
+
     @Override
-    public void setActionsEnabled(boolean hasSelection) {
-        checkOffButton.setDisable(!hasSelection);
-    }
+    public void setActionsEnabled(boolean hasSelection) {}
+
     @Override
     public void showError(String message) {
-        Platform.runLater(() -> new Alert(Alert.AlertType.ERROR, message).showAndWait());
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
     }
 }
