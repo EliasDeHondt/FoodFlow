@@ -1,6 +1,8 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
@@ -8,13 +10,14 @@ package be.uantwerpen.sd.project.model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
+
 import be.uantwerpen.sd.project.DayPlan;
 import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.MealType;
-import be.uantwerpen.sd.project.Singleton.RecipeRepository;
 import be.uantwerpen.sd.project.builder.Recipe;
 import be.uantwerpen.sd.project.observer.GroceryList;
 import be.uantwerpen.sd.project.observer.WeeklyPlan;
+import be.uantwerpen.sd.project.singleton.RecipeRepository;
 import be.uantwerpen.sd.project.strategy.DefaultMealPlanStrategy;
 import be.uantwerpen.sd.project.strategy.MealPlanningStrategy;
 

@@ -1,6 +1,8 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
@@ -8,6 +10,7 @@ package be.uantwerpen.sd.project.viewfx;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.builder.Recipe;
 import be.uantwerpen.sd.project.view.RenderPort;

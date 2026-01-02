@@ -1,6 +1,8 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
@@ -11,7 +13,7 @@ import be.uantwerpen.sd.project.builder.Recipe;
 import be.uantwerpen.sd.project.model.Model;
 import be.uantwerpen.sd.project.strategy.DefaultMealPlanStrategy;
 import be.uantwerpen.sd.project.strategy.MealPlanningStrategy;
-import be.uantwerpen.sd.project.strategy.VegetarianMealPlanStrategy;
+import be.uantwerpen.sd.project.strategy.VeganMealPlanStrategy;
 
 public class MealPlannerController implements Controller{
     private final Model db;
@@ -61,8 +63,8 @@ public class MealPlannerController implements Controller{
     @Override
     public void setStrategy(String strategy) {
         MealPlanningStrategy s = new DefaultMealPlanStrategy();
-        if (strategy.equals("vegetarian")) {
-            s = new VegetarianMealPlanStrategy();
+        if (strategy.equals("vegan")) {
+            s = new VeganMealPlanStrategy();
         }
         this.db.setStrategy(s);
     }

@@ -1,6 +1,8 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
@@ -17,8 +19,8 @@ import be.uantwerpen.sd.project.builder.Recipe;
 import be.uantwerpen.sd.project.controller.Controller;
 import be.uantwerpen.sd.project.controller.MealPlannerController;
 import be.uantwerpen.sd.project.model.Model;
+import be.uantwerpen.sd.project.singleton.RecipeRepository;
 import be.uantwerpen.sd.project.model.MealPlannerDB;
-import be.uantwerpen.sd.project.Singleton.RecipeRepository;
 
 public class ObserverPatternIntegrationTest {
     private Model model;

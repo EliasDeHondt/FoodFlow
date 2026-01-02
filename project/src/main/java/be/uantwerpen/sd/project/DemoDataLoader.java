@@ -1,12 +1,15 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
 package be.uantwerpen.sd.project;
 import java.util.Arrays;
 import java.util.List;
+
 import be.uantwerpen.sd.project.builder.Recipe;
 import be.uantwerpen.sd.project.controller.Controller;
 

@@ -1,6 +1,8 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
@@ -8,15 +10,16 @@ package be.uantwerpen.sd.project.strategy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import be.uantwerpen.sd.project.DayPlan;
 import be.uantwerpen.sd.project.MealType;
-import be.uantwerpen.sd.project.Singleton.RecipeRepository;
 import be.uantwerpen.sd.project.builder.Recipe;
 import be.uantwerpen.sd.project.observer.WeeklyPlan;
+import be.uantwerpen.sd.project.singleton.RecipeRepository;
 
-public class VegetarianMealPlanStrategy implements MealPlanningStrategy {
+public class VeganMealPlanStrategy implements MealPlanningStrategy {
 
-    public VegetarianMealPlanStrategy() {}
+    public VeganMealPlanStrategy() {}
 
     @Override
     public void generatePlan(WeeklyPlan weeklyplan, RecipeRepository recipeRepo) {

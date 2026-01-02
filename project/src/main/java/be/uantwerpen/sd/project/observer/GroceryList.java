@@ -1,6 +1,8 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
@@ -42,8 +44,8 @@ public class GroceryList implements Observer {
         items.merge(name,i, Ingredient::add);
     }
 
-    public void checkOffItem(Ingredient a) {
-        checkedItems.add(a.getName());
+    public void checkOffItem(Ingredient i) {
+        checkedItems.add(i.getName());
     }
 
     public void uncheckItem(String name) {
