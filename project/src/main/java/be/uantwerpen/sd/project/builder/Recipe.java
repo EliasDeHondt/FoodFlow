@@ -1,12 +1,15 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
 package be.uantwerpen.sd.project.builder;
 import java.util.ArrayList;
 import java.util.List;
+
 import be.uantwerpen.sd.project.Ingredient;
 
 public class Recipe {
@@ -14,7 +17,7 @@ public class Recipe {
     private final String description;
     private final List<Ingredient> ingredients;
     private final List<String> tags;
-    private int id;
+    private final int id;
 
     public static RecipeBuilder builder() {
         return new RecipeBuilder();

@@ -1,6 +1,8 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import be.uantwerpen.sd.project.builder.Recipe;
+import be.uantwerpen.sd.project.singleton.RecipeRepository;
 
 public class RecipeRepositoryTest {
 

@@ -1,6 +1,8 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import be.uantwerpen.sd.project.builder.Recipe;
 
 public class DayPlan {

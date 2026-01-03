@@ -1,6 +1,8 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
@@ -51,6 +53,7 @@ public class MealPlannerView extends BorderPane implements RenderPort {
     private final Button generatePlanButton = new Button("Generate Plan");
     private final Button removeMealButton = new Button("Remove");
     private final Button changeMealButton = new Button("Change");
+    private final Button changeStrategyButton = new Button("Default");
 
     private final VBox MealBox = new VBox(8);
 
@@ -69,7 +72,7 @@ public class MealPlannerView extends BorderPane implements RenderPort {
 
         buildWeeklyPlan();
         Label leftTitle = new Label("Weekly plan");
-        HBox leftHeader = new HBox(8, leftTitle, generatePlanButton, changeMealButton, removeMealButton);
+        HBox leftHeader = new HBox(8, leftTitle, generatePlanButton, changeMealButton, removeMealButton, changeStrategyButton);
         VBox left = new VBox(8, leftHeader, MealBox);
         left.setPadding(new Insets(8));
         setLeft(left);
@@ -114,6 +117,17 @@ public class MealPlannerView extends BorderPane implements RenderPort {
 
         changePageButton.setOnAction(e -> {
             if (logic != null) logic.ToGroceryList();
+        });
+
+        changeStrategyButton.setOnAction(e -> {
+            if (changeStrategyButton.getText().equals("Default")) {
+                changeStrategyButton.setText("Vegan");
+                if (logic != null) logic.onSetStrategy("vegan");
+            }
+            else if (changeStrategyButton.getText().equals("Vegan")) {
+                changeStrategyButton.setText("Default");
+                if (logic != null) logic.onSetStrategy("default");
+            }
         });
         
         addRecipeButton.setOnAction(e -> toggleForm(true));

@@ -1,11 +1,14 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
 package be.uantwerpen.sd.project.view;
 import java.util.List;
+
 import be.uantwerpen.sd.project.Ingredient;
 import be.uantwerpen.sd.project.builder.Recipe;
 

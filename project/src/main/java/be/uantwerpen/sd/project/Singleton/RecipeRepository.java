@@ -1,10 +1,12 @@
 /**
  * @author Elias De Hondt
+ * @author Jarn Vaerewijck
  * @see https://eliasdh.com
+ * @see https://github.com/jVaerewijck
  * @since 01/01/2026
  **/
 
-package be.uantwerpen.sd.project.Singleton;
+package be.uantwerpen.sd.project.singleton;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +46,7 @@ public class RecipeRepository {
     public List<Recipe> getAll() {
         return List.copyOf(this.recipes.values());
     }
-    public int nextId() {
+    private int nextId() {
         return ++counter;
   }
 }
